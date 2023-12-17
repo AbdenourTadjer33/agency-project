@@ -22,6 +22,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['client', 'admin']);
+            $table->string('passport_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

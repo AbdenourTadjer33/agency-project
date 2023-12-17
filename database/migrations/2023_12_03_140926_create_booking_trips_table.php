@@ -14,9 +14,7 @@ return new class extends Migration
         Schema::create('booking_trips', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booking_id')->constrained();
-            $table->enum('type_chambre', ['single', 'double', 'triple', 'quadruple']);
-            $table->enum('formule', ['petit-dejeuner', 'demi-pension', 'pension-complete']);
-            $table->timestamps();
+            $table->enum('formule', ['petit-dej', 'demi-pension', 'pension-complete']);
         });
     }
 

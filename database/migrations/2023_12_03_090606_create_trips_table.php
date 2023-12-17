@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->string('name', 128);
+            $table->string('slug')->unique();
             $table->longText('description');
             $table->string('destination');
-            $table->float('price_adult');
-            $table->float('price_child');
-            $table->float('price_baby');
-            $table->float('reduction');
+            $table->string('category');
+            $table->enum('formule_base', ['petit-dej', 'demi-pension', 'pension-complete']);
+            $table->json('assets');
+            $table->foreignId('hotel_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

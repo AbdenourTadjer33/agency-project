@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('booking_id')->constrained();
             $table->enum('flight_type', ['aller-retour', 'aller-simple']);
-            $table->string('departure_airport');
-            $table->string('arrived_airport');
+            $table->string('airport_departure');
+            $table->string('airport_arrived');
             $table->string('compagnie');
             $table->enum('class', ['Economie', 'Affaires', 'Première']);
-            $table->timestamps();
         });
     }
 

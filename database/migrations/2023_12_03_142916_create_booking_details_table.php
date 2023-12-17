@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignUuid('user_uuid')->constrained('users', 'uuid');
             $table->foreignId('booking_id')->constrained();
-            $table->string('first_name', 64);
-            $table->string('last_name', 64);
-            $table->date('dob');
-            $table->string('passport_number', 20);
-            $table->timestamps();
+            $table->string('first_name', 64)->nullable();
+            $table->string('last_name', 64)->nullable();
+            $table->date('dob')->nullable();
+            $table->string('passport_id', 20)->nullable();
         });
     }
 

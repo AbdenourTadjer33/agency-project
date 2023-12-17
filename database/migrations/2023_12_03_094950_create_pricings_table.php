@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking_hotels', function (Blueprint $table) {
+        Schema::create('pricings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_id')->constrained();
-            $table->enum('type_chambre', ['single', 'double', 'triple', 'quadruple']);
-            $table->enum('formule', ['petit-dej', 'demi-pension', 'pension-complete']);
+            $table->morphs('pricingable');
+            $table->float('price_adult');
+            $table->float('price_child');
+            $table->float('price_baby');
+            $table->float('price_f1');
+            $table->float('price_f2');
+            $table->float('price_f3');
         });
     }
 
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('booking_hotels');
+        Schema::dropIfExists('pricings');
     }
 };
