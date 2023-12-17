@@ -12,7 +12,7 @@ class Testimonial extends Model
     protected $fillable = [
         'user_uuid',
         'trip_id',
-        'testimnial',
+        'avis',
         'rating'
     ];
 }
