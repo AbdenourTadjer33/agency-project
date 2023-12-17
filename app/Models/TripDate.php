@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class TripDate extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'trip_id',
+        'date_departure',
+        'date_return'
+    ];
+
+    public $timestamps = false;
 }
