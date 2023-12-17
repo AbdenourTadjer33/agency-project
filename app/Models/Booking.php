@@ -10,10 +10,13 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
+        'date_departure',
+        'date_return',
+        'status',
         'numbre_adult',
         'number_child',
         'number_baby',
-        'departure_date',
-        'arrived_date',
+        'is_payed',
+        'is_online'
     ];
 }

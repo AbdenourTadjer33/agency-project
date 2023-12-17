@@ -11,7 +11,8 @@ class BookingTrip extends Model
 
     protected $protected = [
         'booking_id',
-        'type_chambre',
         'formule'
     ];
+
+    public $timestamps = false;
 }

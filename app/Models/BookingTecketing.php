@@ -12,10 +12,11 @@ class BookingTecketing extends Model
     protected $fillable = [
         'booking_id',
         'flight_type',
-        'departure_airport',
-        'arrived_airport',
+        'airport_departure',
+        'airport_arrived',
         'compagnie',
         'class'
     ];
-    
+
+    public $timestamps = false;
 }

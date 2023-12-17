@@ -14,4 +14,6 @@ class BookingHotel extends Model
         'type_chambre',
         'formule',
     ];
+
+    public $timestamps = false;
 }

@@ -17,4 +17,6 @@ class BookingDetail extends Model
         'dob',
         'passport_number'
     ];
+
+    public $timestamps = false;
 }
