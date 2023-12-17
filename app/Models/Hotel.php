@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Hotel extends Model
 {
@@ -14,22 +15,24 @@ class Hotel extends Model
         'name',
         'slug',
         'description',
+        'country',
+        'city',
+        'address',
         'coordinates',
         'classification',
         'number_rooms',
         'services',
-        'address',
-        'city',
-        'country',
+        'assets',
     ];
 
     public $cast = [
         'coordinates' => 'array',
         'services' => 'array',
+        'assets' => 'array',
     ];
 
-    public function assets() : HasMany 
+    public function pricing(): MorphOne
     {
-        return $this->hasMany(HotelAsset::class);
+        return $this->morphOne(Pricing::class, 'pricingable');
     }
 }
