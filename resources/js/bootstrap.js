@@ -4,20 +4,28 @@
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-import axios from 'axios';
-
-import 'flowbite';
-
-import Chart from 'chart.js/auto';
-
-window.Chart = Chart;
-
+import axios from "axios";
 
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 window.axios = axios;
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+
+import "flowbite";
+import Datepicker from "flowbite-datepicker/Datepicker";
+import fr from "flowbite-datepicker/locales/fr";
+
+const datepickerEl = document.querySelectorAll("[datepicker]").forEach(function (datepickerEl) {
+    Object.assign(Datepicker.locales, fr);
+    const datePicker = new Datepicker(datepickerEl, {
+      language: 'fr',
+    });
+
+});
+
+import Chart from "chart.js/auto";
+window.Chart = Chart;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -28,7 +36,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // import Echo from 'laravel-echo';
 
 // import Pusher from 'pusher-js';
-// window.Pusher = Pusher;
+// window.Pusher = Pusher;https://github.com/themesberg/flowbite-datepicker/blob/master/dist/js/locales/de.js#L6
 
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
