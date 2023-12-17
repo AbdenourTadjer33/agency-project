@@ -11,8 +11,6 @@ class Agency extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'description',
         'networks',
     ];
 
@@ -21,8 +19,8 @@ class Agency extends Model
     ];
 
 
-    public function coordinates() : HasMany {
-        return $this->hasMany(Coordinate::class);
+    public function agencyCoordinates() : HasMany {
+        return $this->hasMany(AgencyCoordinate::class);
     }
 
     public $timestamps = false;
