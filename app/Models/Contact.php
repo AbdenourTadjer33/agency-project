@@ -13,6 +13,8 @@ class Contact extends Model
         'user_uuid',
         'full_name',
         'email',
+        'phone',
+        'objet',
         'message'
     ];
 }
