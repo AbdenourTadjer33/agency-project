@@ -13,14 +13,14 @@ class HotelController extends Controller
 {
     public function index()
     {
-        return view('admin.manage-hotels', [
+        return view('admin.hotel.manage-hotels', [
             'hotels' => Hotel::paginate(5),
         ]);
     }
 
     public function create()
     {
-        return view('admin.create-hotel');
+        return view('admin.hotel.create-hotel');
     }
 
     public function store(Request $request)
@@ -28,57 +28,73 @@ class HotelController extends Controller
         $request->validate([
             'name' => ['required', 'min:2', 'unique:' . Hotel::class],
             'description' => ['required', 'min:10'],
-            'address' => ['required', 'min:5'],
             'country' => ['required'],
             'city' => ['required'],
+            'address' => ['required', 'min:5'],
             'coordinates' => ['required', 'array'],
-            'coordinates.phone' => ['required', 'string'],
-            'coordinates.email' => ['required', 'string'],
+            'coordinates.phone' => ['required'],
+            'coordinates.phone_code' => ['required'],
+            'coordinates.email' => ['required', 'string', 'email'],
+            'coordinates.website' => ['nullable', 'url'],
+            'coordinates.facebook' => ['nullable', 'url'],
+            'coordinates.instagram' => ['nullable', 'url'],
+            'coordinates.booking' => ['nullable', 'url'],
             'rating' => ['required', 'integer'],
             'nb_rooms' => ['required', 'integer'],
             'services' => ['required'],
-            'assets' => ['required', 'array', 'min:1', 'max:6'],
-            'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg', 'max:2048']
+            'assets' => ['required', 'array', 'min:1', 'max:10'],
+            'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg', 'max:2048'],
+            'price_adult' => ['required'],
+            'price_child' => ['required'],
+            'price_baby' => ['required'],
+            'price_f1' => ['required'],
+            'price_f2' => ['required'],
+            'price_f3' => ['required'],
         ]);
+
+        $assets = $request->file('assets');
+
+        $paths = [];
+        for ($i = 0; $i < sizeof($assets); $i++) {
+            $paths[] = $assets[$i]->store('public/hotels');
+        }
 
         $hotel = Hotel::create([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'description' => $request->description,
-            'address' => $request->address,
-            'city' => $request->city,
             'country' => $request->country,
-            'coordinates' => json_encode([
-                'phone' => $request->phone_code . $request->coordinates['phone'],
-                'email' => $request->coordinates['email']
-            ]),
+            'city' => $request->city,
+            'address' => $request->address,
+            'coordinates' => json_encode($request->coordinates),
             'classification' => $request->rating,
             'number_rooms' => $request->nb_rooms,
-            'services' => json_encode(explode(',', $request->services))
+            'services' => json_encode(explode(',', $request->services)),
+            'assets' => json_encode($paths),
         ]);
 
-        $assets = $request->file('assets');
-
-        for ($i = 0; $i < sizeof($assets); $i++) {
-            $hotel->assets()->create([
-                'type' => 'image',
-                'path' => $assets[$i]->store('public/hotels'),
-            ]);
-        }
+        $hotel->pricing()->create([
+            'price_adult' => $request->price_adult,
+            'price_child' => $request->price_child,
+            'price_baby' => $request->price_baby,
+            'price_f1' => $request->price_f1,
+            'price_f2' => $request->price_f2,
+            'price_f3' => $request->price_f3,
+        ]);
 
         return redirect(route('admin.hotel.show', ['id' => $hotel->id]))->with('status', 'Hôtel créer avec succés');
     }
 
     public function show($id)
     {
-        return view('admin.manage-hotels', [
+        return view('admin.hotel.manage-hotels', [
             'hotels' => Hotel::where('id', $id)->get()
         ]);
     }
 
     public function edit($id)
     {
-        return view('admin.edit-hotel', [
+        return view('admin.hotel.edit-hotel', [
             'hotel' => Hotel::findOrFail($id)
         ]);
     }
@@ -89,17 +105,26 @@ class HotelController extends Controller
         $request->validate([
             'name' => ['required', 'min:2', 'unique:hotels,name,' . $hotel->id],
             'description' => ['required', 'min:10'],
-            'address' => ['required', 'min:5'],
             'country' => ['required'],
             'city' => ['required'],
+            'address' => ['required', 'min:5'],
             'coordinates' => ['required', 'array'],
-            'coordinates.phone' => ['required', 'string'],
-            'coordinates.email' => ['required', 'string'],
+            'coordinates.phone' => ['required'],
+            'coordinates.phone_code' => ['required'],
+            'coordinates.email' => ['required', 'string', 'email'],
+            'coordinates.website' => ['nullable', 'url'],
+            'coordinates.facebook' => ['nullable', 'url'],
+            'coordinates.instagram' => ['nullable', 'url'],
+            'coordinates.booking' => ['nullable', 'url'],
             'rating' => ['required', 'integer'],
             'nb_rooms' => ['required', 'integer'],
             'services' => ['required'],
-            // 'assets' => ['required', 'array', 'min:1'],
-            // 'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg']
+            'price_adult' => ['required'],
+            'price_child' => ['required'],
+            'price_baby' => ['required'],
+            'price_f1' => ['required'],
+            'price_f2' => ['required'],
+            'price_f3' => ['required'],
         ]);
 
         $hotel->update([
@@ -109,18 +134,41 @@ class HotelController extends Controller
             'address' => $request->address,
             'city' => $request->city,
             'country' => $request->country,
-            'coordinates' => json_encode([
-                'phone' => $request->phone_code . $request->coordinates['phone'],
-                'email' => $request->coordinates['email']
-            ]),
+            'coordinates' => json_encode($request->coordinates),
             'classification' => $request->rating,
             'number_rooms' => $request->nb_rooms,
             'services' => json_encode(explode(',', $request->services))
         ]);
 
-        return redirect(route('admin.hotel.show', ['id' => $hotel->id]))->with('status', 'Hôtel créer avec succés');
+        $hotel->pricing()->update([
+            'price_adult' => $request->price_adult,
+            'price_child' => $request->price_child,
+            'price_baby' => $request->price_baby,
+            'price_f1' => $request->price_f1,
+            'price_f2' => $request->price_f2,
+            'price_f3' => $request->price_f3,
+        ]);
+
+        return redirect(route('admin.hotel.show', ['id' => $hotel->id]))->with('status', $hotel->name . 'modifier avec succés');
     }
 
+    public function editAssets($id)
+    {
+        return view('admin.hotel.edit-hotel-assets', [
+            'hotel' => Hotel::findOrFail($id)
+        ]);
+    }
+
+    public function updateAssets(Request $request, $id)
+    {
+        $hotel = Hotel::findOrFail($id);
+        $request->validate([
+            'assets' => ['required', 'array', 'min:1', 'max:10'],
+            'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg', 'max:2048']
+        ]);
+
+        // Storage::disk('public')
+    }
 
     public function delete($id)
     {
