@@ -8,6 +8,10 @@ import axios from 'axios';
 
 import 'flowbite';
 
+import Chart from 'chart.js/auto';
+
+window.Chart = Chart;
+
 
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
