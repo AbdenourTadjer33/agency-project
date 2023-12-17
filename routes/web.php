@@ -1,9 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\AgencyController;
 use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\ProfileController;
-use App\Models\Agency;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Models\Hotel;
 use App\Models\User;
@@ -79,11 +78,18 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
         Route::get('/hotels/edit/{id}', 'edit')->name('admin.hotel.edit');
         Route::post('/hotels/edit/{id}', 'update')->name('admin.hotel.update');
         Route::get('/hotels/{id}', 'show')->name('admin.hotel.show');
-
-
         Route::delete('/hotels/{id}', 'delete')->name('admin.hotel.delete');
     });
 
+    Route::controller(AgencyController::class)->group(function () {
+        Route::get('/agency', 'index')->name('admin.agency');
+        Route::get('/agency/edit-networks', 'editNetworks')->name('admin.agency.edit');
+        Route::post('/agency/edit-networks', 'updateNetworks')->name('admin.agency.update');
+        Route::get('/agency/add-coordinates', 'addCoordinates')->name('admin.agency.newCoordinates');
+        Route::post('/agency/add-coordinates', 'storeCoordinates')->name('admin.agency.storeCoordinates');
+        Route::get('/agency/edit-coordinates', 'editCoordinates')->name('admin.agency.editCoordinates');
+        Route::post('/agency/edit-coordinates', 'updateCoordinates')->name('admin.agency.updateCoordinates');
+    });
 
     Route::get('/trips')->name('admin.trips');
 });
