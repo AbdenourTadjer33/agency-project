@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Trip extends Model
 {
@@ -16,9 +17,9 @@ class Trip extends Model
         'slug',
         'description',
         'destination',
-        'category',
         'formule_base',
         'assets',
+        'trip_category_id',
         'hotel_id',
     ];
 
@@ -26,6 +27,10 @@ class Trip extends Model
         'assets' => 'array',
     ];
 
+    public function tripCategory() : HasOne
+    {
+        return $this->hasOne(TripCategorie::class);
+    }
 
     public function tripDates() : HasMany
     {
