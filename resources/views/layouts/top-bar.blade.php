@@ -2,7 +2,6 @@
 @php
     $networks = $agence['networks'];
     $coordinates = $agence['coordinates'];
-    $description = $agence['description'];
     $phones = [];
     $emails = [];
     foreach ($coordinates as $value) {

@@ -14,7 +14,7 @@
         <div class="mt-4">
             <x-input-label for="lname" :value="__('Nom')" />
             <x-text-input id="lname" class="block mt-1 w-full" type="text" name="lname" :value="old('lname')"
-                required autofocus autocomplete="lname" />
+                required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('lname')" class="mt-2" />
         </div>
 
@@ -24,43 +24,26 @@
             <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
                 name="sex" id="sex">
                 <option>sexe</option>
-                <option {{ old('sex') === "female" ? 'selected' : '' }} value="female">femelle</option>
-                <option {{ old('sex') === "male" ? 'selected' : '' }} value="male">mâle</option>
+                <option {{ old('sex') === 'female' ? 'selected' : '' }} value="female">femelle</option>
+                <option {{ old('sex') === 'male' ? 'selected' : '' }} value="male">mâle</option>
             </select>
             <x-input-error :messages="$errors->get('sex')" class="mt-2" />
         </div>
 
         <div class="mt-4">
-            @php
-                $now = new DateTime();
-                $numberOfDay = cal_days_in_month(CAL_GREGORIAN, $now->format('m'), $now->format('Y'));
-                $months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-            @endphp
-
             <x-input-label :value="__('Date de naissance')" />
-            <div class="flex gap-1">
-                <select
-                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-1/3 "
-                    name="dob[day]" id="day">
-                    @for ($i = 1; $i <= $numberOfDay; $i++)
-                        <option {{ $i == $now->format('d') ? 'selected' : '' }} value="{{ $i }}">
-                            {{ $i < 10 ? '0' . $i : $i }}</option>
-                    @endfor
-                </select>
 
-                <select
-                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-1/3 "
-                    name="dob[month]" id="month">
-                    @foreach ($months as $key => $month)
-                        <option value="{{ $key + 1 }}">{{ $month }}</option>
-                    @endforeach
-                </select>
-                <select class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-1/3"
-                    name="dob[year]" id="year">
-                    @for ($i = $now->format('Y'); $i > '1950'; $i--)
-                        <option value="{{ $i }}">{{ $i }}</option>
-                    @endfor
-                </select>
+            <div class="relative ">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                    </svg>
+                </div>
+                <input datepicker datepicker-format="yyyy-mm-dd" datepicker-orientation="bottom" type="text" name="dob" value="{{ old('dob') }}" 
+                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="sélectionner une date">
             </div>
             <x-input-error :messages="$errors->get('dob')" class="mt-2" />
         </div>
@@ -112,4 +95,5 @@
             </x-primary-button>
         </div>
     </form>
+
 </x-guest-layout>
