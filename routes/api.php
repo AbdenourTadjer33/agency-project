@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\TripController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -27,4 +28,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/verify-email', 'verifyEmail')
         ->middleware('auth:sanctum')
         ->name('verification.code');
+});
+
+Route::controller(TripController::class)->prefix('admin')->middleware(['auth:sanctum', 'role:admin'])->group(function (){
+    Route::post('/trips/add-category', 'storeCategory')->name('admin.store.category');
 });
