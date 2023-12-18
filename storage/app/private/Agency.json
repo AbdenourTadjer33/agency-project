@@ -1,5 +1,4 @@
 {
-    "description": "Best Tours votre Agence de Voyage en Algérie vous propose des Promotions sur vos Voyages et Séjours en Algérie et dans le Monde avec les Meilleurs Prix et Services.",
     "networks": {
         "facebook": "https://fr-fr.facebook.com/AgenceBestTours",
         "instagram": "https://www.instagram.com/best_tours_tunisia",
@@ -7,6 +6,7 @@
     },
     "coordinates": [
         {
+            "id": 1,
             "name": "Siége Social",
             "phone": "+213 770638523",
             "email":"contact@best-tour.dz",
@@ -15,6 +15,7 @@
             "country": "Algérie"
         },
         {
+            "id": 2,
             "name": "Agence Hydra",
             "phone": "+213 550638753",
             "email": "commercial-hydra@best-tour.dz",
@@ -23,6 +24,7 @@
             "country": "Algérie"
         },
         {
+            "id": 3,
             "name": "Agence Oran",
             "phone": "+213 780115527",
             "email": "commercial-oran@best-tour.dz",
