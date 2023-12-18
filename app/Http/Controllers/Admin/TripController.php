@@ -3,27 +3,36 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Trip;
-use App\Models\Hotel;
+use App\Models\TripCategorie;
 use App\Models\TripDate;
+use App\Models\Hotel;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class TripController extends Controller
 {
     public function index()
     {
+        return view('admin.trip.index');
     }
 
     public function create()
     {
-        return view('admin.trip.create-trip');
+        return view('admin.trip.create', [
+            'categories' => TripCategorie::all(),
+            'hotels' => Hotel::all(),
+        ]);
     }
 
     public function store(Request $request)
     {
+
+        dd($request->get('on_my_hotels'));
+
         // validate incoming data
         $request->validate([
             'name' => ['required', 'min:2'],
@@ -45,9 +54,8 @@ class TripController extends Controller
             'price_f3' => ['required'],
         ]);
 
-
         if ($request->get('on_my_hotels')) {
-            $hotel = Hotel::where('slug', $request->slug)->first();
+            $hotel = Hotel::find($request->hotel_id);
         } else {
             Validator::make($request->all(), [
                 'hotel.name' => ['required'],
@@ -120,5 +128,18 @@ class TripController extends Controller
 
     public function delete()
     {
+    }
+
+    public function storeCategory(Request $request)
+    {
+        TripCategorie::create([
+            'name' => $request->name,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'categoty added successfully',
+            'categories' => TripCategorie::all()
+        ], 200);
     }
 }
