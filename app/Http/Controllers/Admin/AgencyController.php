@@ -97,7 +97,7 @@ class AgencyController extends Controller
         return redirect(route('admin.agency'))->with('status', 'les données de ' . $agencyCoordinates->name . ' sont modifier avec succés');
     }
 
-    public function deleteAgencyCoordinate(Request $request, $id)
+    public function deleteCoordinate(Request $request, $id)
     {
         $agence = AgencyCoordinate::findOrFail($id);
         $agence->delete();
