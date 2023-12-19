@@ -14,7 +14,7 @@ class HotelController extends Controller
     public function index()
     {
         return view('admin.hotel.manage-hotels', [
-            'hotels' => Hotel::paginate(5),
+            'hotels' => Hotel::all(),
         ]);
     }
 
@@ -25,12 +25,14 @@ class HotelController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => ['required', 'min:2', 'unique:' . Hotel::class],
             'description' => ['required', 'min:10'],
             'country' => ['required'],
             'city' => ['required'],
             'address' => ['required', 'min:5'],
+            'nb_rooms' => ['required', 'integer'],
             'coordinates' => ['required', 'array'],
             'coordinates.phone' => ['required'],
             'coordinates.phone_code' => ['required'],
@@ -39,11 +41,10 @@ class HotelController extends Controller
             'coordinates.facebook' => ['nullable', 'url'],
             'coordinates.instagram' => ['nullable', 'url'],
             'coordinates.booking' => ['nullable', 'url'],
-            'rating' => ['required', 'integer'],
-            'nb_rooms' => ['required', 'integer'],
-            'services' => ['required'],
+            'classification' => ['required', 'integer'],
+            'services' => ['required', 'array'],
             'assets' => ['required', 'array', 'min:1', 'max:10'],
-            'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg', 'max:2048'],
+            'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg', 'max:4096'],
             'price_adult' => ['required'],
             'price_child' => ['required'],
             'price_baby' => ['required'],
@@ -67,9 +68,9 @@ class HotelController extends Controller
             'city' => $request->city,
             'address' => $request->address,
             'coordinates' => json_encode($request->coordinates),
-            'classification' => $request->rating,
+            'classification' => $request->classification,
             'number_rooms' => $request->nb_rooms,
-            'services' => json_encode(explode(',', $request->services)),
+            'services' => json_encode($request->services),
             'assets' => json_encode($paths),
         ]);
 
