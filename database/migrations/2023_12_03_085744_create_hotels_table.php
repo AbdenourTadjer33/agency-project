@@ -17,13 +17,13 @@ return new class extends Migration
             $table->string('name', 128)->unique();
             $table->string('slug')->nullable()->unique();
             $table->longText('description')->nullable();
-            $table->string('country');
-            $table->string('city', 64);
-            $table->string('address', 128);
+            $table->string('country')->nullable();
+            $table->string('city', 64)->nullable();
+            $table->string('address', 128)->nullable();
             $table->json('coordinates')->nullable();
-            $table->integer('classification');
+            $table->integer('classification')->nullable();
             $table->integer('number_rooms')->nullable();
-            $table->json('services');
+            $table->json('services')->nullable();
             $table->json('assets')->nullable();
             $table->timestamps();
         });

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('booking_id')->constrained();
             $table->enum('type_chambre', ['single', 'double', 'triple', 'quadruple']);
-            $table->enum('formule', ['petit-dej', 'demi-pension', 'pension-complete']);
+            $table->enum('formule', ['LPD', 'LDP', 'LPC']);
         });
     }
 

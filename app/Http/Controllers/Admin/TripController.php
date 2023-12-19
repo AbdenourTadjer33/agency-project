@@ -17,7 +17,16 @@ class TripController extends Controller
 {
     public function index()
     {
-        return view('admin.trip.index');
+        return view('admin.trip.index', [
+            'trips' => Trip::all()
+        ]);
+    }
+
+    public function show($id)
+    {
+        return view('admin.trip.index', [
+            'trips' => Trip::where('id', $id)->get()
+        ]);
     }
 
     public function create()
@@ -30,18 +39,13 @@ class TripController extends Controller
 
     public function store(Request $request)
     {
-
-        dd($request->get('on_my_hotels'));
-
-        // validate incoming data
         $request->validate([
             'name' => ['required', 'min:2'],
+            'category' => ['required'],
+            'formule_base' => ['required', Rule::in(['LPD', 'LDP', 'LPC'])],
             'description' => ['required'],
             'destination' => ['required'],
-            'category' => ['required'],
-            'formule_base' => ['required', Rule::in(['petit-dej', 'demi-pension', 'pension-complete'])],
-            'assets' => ['required', 'array', 'min:1', 'max:10'],
-            'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg', 'max:2048'],
+            'city' => ['required'],
             'dates' => ['required', 'array'],
             'dates.*' => ['required', 'array'],
             'dates.*.departure' => ['required', 'date'],
@@ -49,38 +53,49 @@ class TripController extends Controller
             'price_adult' => ['required'],
             'price_child' => ['required'],
             'price_baby' => ['required'],
-            'price_f1' => ['required'],
-            'price_f2' => ['required'],
-            'price_f3' => ['required'],
+            'assets' => ['required', 'array', 'min:1', 'max:10'],
+            'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg', 'max:2048'],
         ]);
 
-        if ($request->get('on_my_hotels')) {
-            $hotel = Hotel::find($request->hotel_id);
+        if ($request->get('on_my_hotels') === "on") {
+            $hotel = Hotel::findOrfail($request->hotel_slug);
         } else {
-            Validator::make($request->all(), [
+            $validator = Validator::make($request->all(), [
+                'hotel' => ['required', 'array'],
                 'hotel.name' => ['required'],
-                'hotel.country' => ['required'],
-                'hotel.city' => ['required'],
-                'hotel.address' => ['required'],
-                'hotel.classification' => ['required'],
-                'hotel.services' => ['required']
+                'hotel.classification' => ['required', 'integer'],
             ], attributes: [
+                'hotel' => 'donées d\'hôtel',
                 'hotel.name' => 'nom d\'hôtel',
-                'hotel.country' => 'pays d\'hotel',
-                'hotel.city' => 'pays d\'hôtel',
-                'hotel.address' => 'adresse d\'hôtel',
-                'hotel.classification' => 'classification d\'hôtel',
-                'hotel.services' => 'services d\'hôtel',
             ]);
+
+            if ($validator->fails()) {
+                return redirect((route('admin.trip.create', ['on_my_hotels' => '1'])))
+                    ->withErrors($validator)
+                    ->withInput();
+            }
 
             $hotel = Hotel::create([
                 'name' => $request->hotel['name'],
-                'country' => $request->hotel['country'],
-                'city' => $request->hotel['city'],
-                'address' => $request->hotel['address'],
                 'classification' => $request->hotel['classification'],
-                'services' => $request->hotel['services']
             ]);
+
+            if ($request->hotel['country']) {
+                $hotel->country = $request->hotel['country'];
+                $hotel->save();
+            };
+            if ($request->hotel['city']) {
+                $hotel->city = $request->hotel['city'];
+                $hotel->save();
+            };
+            if ($request->hotel['address']) {
+                $hotel->address = $request->hotel['address'];
+                $hotel->save();
+            };
+            if ($request->hotel['services']) {
+                $hotel->services = json_encode($request->hotel['services']);
+                $hotel->save();
+            };
         }
 
         $assets = $request->file('assets');
@@ -95,7 +110,8 @@ class TripController extends Controller
             'slug' => Str::slug(Str::random() . ' ' . $request->name),
             'description' => $request->description,
             'destination' => $request->destination,
-            'category' => $request->category,
+            'city' => $request->city,
+            'trip_category_id' => $request->category,
             'formule_base' => $request->formule_base,
             'assets' => json_encode($paths),
             'hotel_id' => $hotel->id
@@ -112,10 +128,9 @@ class TripController extends Controller
             'price_adult' => $request->price_adult,
             'price_child' => $request->price_child,
             'price_baby' => $request->price_baby,
-            'price_f1' => $request->price_f1,
-            'price_f2' => $request->price_f2,
-            'price_f3' => $request->price_f3,
         ]);
+
+        return redirect(route('admin.trip.show', ['id' => $trip->id]))->with('status', 'Voyage organisé créer avec succés!');
     }
 
     public function edit()

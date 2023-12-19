@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>Admin panel</title>
+    <title>{{ $title ?? 'Admin panel' }}</title>
+
 </head>
 
 <body>
@@ -282,6 +283,10 @@
     <main class="p-4 xl:ml-64 mt-14">
         {{ $slot }}
     </main>
+
+    @isset($script)
+        <script src="{{ $script }}"></script>
+    @endisset
 
 </body>
 

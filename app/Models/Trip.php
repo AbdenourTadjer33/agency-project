@@ -17,6 +17,7 @@ class Trip extends Model
         'slug',
         'description',
         'destination',
+        'city',
         'formule_base',
         'assets',
         'trip_category_id',
@@ -29,12 +30,12 @@ class Trip extends Model
 
     public function tripCategory() : HasOne
     {
-        return $this->hasOne(TripCategorie::class);
+        return $this->hasOne(TripCategorie::class, );
     }
 
     public function tripDates() : HasMany
     {
-        return $this->hasMany(Trip::class);
+        return $this->hasMany(TripDate::class);
     }
 
     public function pricing(): MorphOne

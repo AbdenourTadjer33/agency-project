@@ -18,7 +18,7 @@ return new class extends Migration
             $table->longText('description');
             $table->string('destination');
             $table->foreignId('trip_category_id')->constrained('trip_categories', 'id');
-            $table->enum('formule_base', ['petit-dej', 'demi-pension', 'pension-complete']);
+            $table->enum('formule_base', ['LPD', 'LDP', 'LPC']);
             $table->json('assets');
             $table->foreignId('hotel_id')->nullable()->constrained();
             $table->timestamps();

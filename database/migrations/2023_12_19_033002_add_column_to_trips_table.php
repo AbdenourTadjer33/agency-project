@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking_trips', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('booking_id')->constrained();
-            $table->enum('formule', ['LPD', 'LDP', 'LPC']);
+        Schema::table('trips', function (Blueprint $table) {
+            $table->string('city')->after('destination');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('booking_trips');
+        Schema::table('trips', function (Blueprint $table) {
+            $table->dropColumn('city');
+        });
     }
 };

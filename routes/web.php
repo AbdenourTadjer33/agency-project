@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Admin\AgencyController;
 use App\Http\Controllers\Admin\HotelController;
+use App\Http\Controllers\Admin\TripController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Hotel;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,14 +15,16 @@ Route::get('/', function () {
     return view('welcome', ['agence' => $agence]);
 })->name('welcome');
 
-
-Route::get('/users', function () {
-    return User::paginate(5);
+Route::get('/rich-text-editor', function () {
+    return view('rich-text-editor');
 });
-
 
 Route::get('/trips', function () {
 })->name('trips');
+
+Route::get('/trip/{slug}', function($slug) {
+    dd(Trip::where('slug', $slug));
+})->name('trip');
 
 Route::get('/hotels', function () {
     $agence = Storage::json('private/Agency.json');
@@ -68,9 +72,31 @@ Route::get('/contact', function () {
  * 
  * 
  */
-Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
+Route::middleware('auth', 'verified', 'role:admin')->prefix('admin')->group(function () {
+    // dashboard
     Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
 
+    // agency management
+    Route::controller(AgencyController::class)->group(function () {
+        Route::get('/agency', 'index')->name('admin.agency');
+        Route::get('/agency/edit-networks', 'editNetworks')->name('admin.agency.edit');
+        Route::post('/agency/edit-networks', 'updateNetworks')->name('admin.agency.update');
+        Route::get('/agency/add-coordinates', 'addCoordinates')->name('admin.agency.newCoordinates');
+        Route::post('/agency/add-coordinates', 'storeCoordinates')->name('admin.agency.storeCoordinates');
+        Route::get('/agency/edit-coordinates', 'editCoordinates')->name('admin.agency.editCoordinates');
+        Route::post('/agency/edit-coordinates', 'updateCoordinates')->name('admin.agency.updateCoordinates');
+        Route::delete('/agency/delete-sub-agence/{id}', 'deleteCoordinate')->name('admin.agency.deleteCoordinates');
+    });
+    
+    // trips
+    Route::controller(TripController::class)->group(function () {
+        Route::get('/trips', 'index')->name('admin.trips');
+        Route::get('/trips/create', 'create')->name('admin.trip.create');
+        Route::post('/trips/create', 'store')->name('admin.trip.store');
+        Route::get('/trips/{id}', 'show')->name('admin.trip.show');
+    });
+
+    // hotel management
     Route::controller(HotelController::class)->group(function () {
         Route::get('/hotels', 'index')->name('admin.hotels');
         Route::get('/hotels/create', 'create')->name('admin.hotel.create');
@@ -80,22 +106,7 @@ Route::middleware('auth', 'verified')->prefix('admin')->group(function () {
         Route::get('/hotels/{id}', 'show')->name('admin.hotel.show');
         Route::delete('/hotels/{id}', 'delete')->name('admin.hotel.delete');
     });
-
-    Route::controller(AgencyController::class)->group(function () {
-        Route::get('/agency', 'index')->name('admin.agency');
-        Route::get('/agency/edit-networks', 'editNetworks')->name('admin.agency.edit');
-        Route::post('/agency/edit-networks', 'updateNetworks')->name('admin.agency.update');
-        Route::get('/agency/add-coordinates', 'addCoordinates')->name('admin.agency.newCoordinates');
-        Route::post('/agency/add-coordinates', 'storeCoordinates')->name('admin.agency.storeCoordinates');
-        Route::get('/agency/edit-coordinates', 'editCoordinates')->name('admin.agency.editCoordinates');
-        Route::post('/agency/edit-coordinates', 'updateCoordinates')->name('admin.agency.updateCoordinates');
-    });
-
-    Route::get('/trips')->name('admin.trips');
 });
-
-
-
 
 Route::middleware('auth', 'verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

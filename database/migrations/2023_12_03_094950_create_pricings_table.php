@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('pricings', function (Blueprint $table) {
             $table->id();
             $table->morphs('pricingable');
-            $table->float('price_adult');
-            $table->float('price_child');
-            $table->float('price_baby');
-            $table->float('price_f1');
-            $table->float('price_f2');
-            $table->float('price_f3');
+            $table->float('price_adult')->nullable();
+            $table->float('price_child')->nullable();
+            $table->float('price_baby')->nullable();
+            $table->float('price_lpd')->nullable();
+            $table->float('price_ldp')->nullable();
+            $table->float('price_lpc')->nullable();
         });
     }
 
