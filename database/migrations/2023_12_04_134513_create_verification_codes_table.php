@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('verification_codes', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('user_uuid')->constrained(table: 'users', column: 'uuid', indexName: 'verification_codes_user_uuid_foreign');
+            $table->foreignUuid('user_uuid')->constrained(table: 'users', column: 'uuid', indexName: 'verification_codes_user_uuid_foreign')
+                ->onDelete('cascade');
             $table->string('code', 10);
             $table->enum('type', ['email', 'password']);
             $table->timestamp('created_at')->nullable();

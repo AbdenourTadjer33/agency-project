@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('booking_hotels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_id')->constrained();
-            $table->enum('type_chambre', ['single', 'double', 'triple', 'quadruple']);
+            $table->foreignId('booking_id')->constrained()
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->enum('type_chambre', ['Pas de préférence', 'single', 'double', 'triple', 'quadruple']);
             $table->enum('formule', ['LPD', 'LDP', 'LPC']);
         });
     }

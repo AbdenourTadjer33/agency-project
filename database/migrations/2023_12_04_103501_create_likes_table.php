@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('user_uuid')->constrained('users', 'uuid');
-            $table->foreignId('trip_id')->constrained();
+            $table->foreignUuid('user_uuid')->constrained('users', 'uuid')
+                ->onDelete('cascade');
+            $table->foreignId('trip_id')->constrained()
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

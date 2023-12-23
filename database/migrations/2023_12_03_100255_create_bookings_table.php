@@ -13,15 +13,21 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->morphs('bookingable');
+            $table->foreignUuid('user_uuid')->constrained('users', 'uuid');
+            $table->string('ref')->unique();
+            $table->enum('type', ['ticketing', 'hotel', 'trip']);
+            $table->nullableMorphs('bookingable');
             $table->date('date_departure');
-            $table->date('date_return');
-            $table->enum('status', ['validé', 'non-validé', 'annulé']);
-            $table->string('numbre_adult');
+            $table->date('date_return')->nullable();
+            $table->enum('status', ['validé', 'non-validé', 'annulé'])->nullable();
+            $table->string('number_adult');
             $table->string('number_child');
             $table->string('number_baby');
-            $table->boolean('is_payed');
-            $table->boolean('is_online');
+            $table->json('beneficiaries');
+            $table->longText('observation')->nullable();
+            $table->boolean('is_payed')->default(false);
+            $table->boolean('is_online')->default(true);
+            $table->float('price')->nullable();
             $table->timestamps();
         });
     }

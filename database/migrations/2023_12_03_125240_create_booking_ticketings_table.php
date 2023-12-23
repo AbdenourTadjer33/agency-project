@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('booking_tecketings', function (Blueprint $table) {
+        Schema::create('booking_ticketings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_id')->constrained();
-            $table->enum('flight_type', ['aller-retour', 'aller-simple']);
+            $table->foreignId('booking_id')->unique()->constrained()
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table->enum('flight_type', ['AR', 'AS']);
             $table->string('airport_departure');
             $table->string('airport_arrived');
             $table->string('compagnie');
-            $table->enum('class', ['Economie', 'Affaires', 'Première']);
+            $table->enum('class', ['Pas de préférence', 'Economie', 'Affaires', 'Première']);
         });
     }
 

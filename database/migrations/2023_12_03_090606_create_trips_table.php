@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->longText('description');
             $table->string('destination');
+            $table->string('city');
             $table->foreignId('trip_category_id')->constrained('trip_categories', 'id');
             $table->enum('formule_base', ['LPD', 'LDP', 'LPC']);
             $table->json('assets');
-            $table->foreignId('hotel_id')->nullable()->constrained();
+            $table->foreignId('hotel_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }

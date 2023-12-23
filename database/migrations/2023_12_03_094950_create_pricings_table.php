@@ -20,6 +20,10 @@ return new class extends Migration
             $table->float('price_lpd')->nullable();
             $table->float('price_ldp')->nullable();
             $table->float('price_lpc')->nullable();
+            $table->float('price_single')->nullable();
+            $table->float('price_double')->nullable();
+            $table->float('price_triple')->nullable();
+            $table->float('price_quadruple')->nullable();
         });
     }
 

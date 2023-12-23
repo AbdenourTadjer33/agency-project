@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('trip_dates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('trip_id')->constrained();
+            $table->foreignId('trip_id')->constrained()
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->date('date_departure');
             $table->date('date_return');
         });

@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('booking_trips', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_id')->constrained();
+            $table->foreignId('booking_id')->constrained()
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->enum('formule', ['LPD', 'LDP', 'LPC']);
         });
     }
