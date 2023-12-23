@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rich Text Editor</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
         #editor {
             border: 1px solid #ccc;
@@ -23,8 +25,8 @@
     </style>
 </head>
 
-<body>
-    <div id="toolbar">
+{{-- <body> --}}
+{{-- <div id="toolbar">
         <div id="alignmentButtons">
             <button onclick="setAlignment('Left')">Aligner à gauche</button>
             <button onclick="setAlignment('Center')">Centrer</button>
@@ -58,6 +60,7 @@
 
 
     <script>
+
         function generateJSON() {
             const editorContent = document.getElementById('editor').innerHTML;
             const jsonOutput = convertToJSON(editorContent);
@@ -73,6 +76,7 @@
 
         function updateToolbar() {
             const selection = window.getSelection();
+            console.log(selection)
             const range = selection.getRangeAt(0);
             const parentNode = range.commonAncestorContainer.parentNode;
 
@@ -110,7 +114,45 @@
         document.getElementById('editor').addEventListener('input', function() {
             updateToolbar();
         });
-    </script>
+    </script> --}}
+
+<body x-data="{ show_backToTop: false }" @scroll.window="show_backToTop = window.pageYOffset > 30">
+    <!-- simple style for the sticky button -->
+    <style>
+        .scrollTop {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            overflow: hidden;
+            z-index: 10;
+        }
+    </style>
+
+    <div :class="show_backToTop ? 'block' : 'hidden'">
+
+        <div id="back_To_Top" x-ref="backTotop" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="scrollTop">
+            <p>Back to top</p>
+        </div>
+
+    </div>
+
+    <table style="width:100%"> <!-- this is only to fill out the page for testing -->
+
+        <template x-for="i in 100">
+
+            <tr>
+                <td x-text="i"></td>
+                <td>aaa</td>
+                <td>bbb</td>
+                <td>ccc</td>
+                <td>ddd</td>
+            </tr>
+
+        </template>
+
+    </table>
+
+    {{-- </body> --}}
 </body>
 
 </html>

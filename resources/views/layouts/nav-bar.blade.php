@@ -1,5 +1,5 @@
 {{-- website navbar --}}
-<nav id="navbar" class="flex justify-between items-center w-full bg-gray-50 py-2 px-5">
+<nav id="navbar" class="flex justify-between items-center w-full bg-gray-50 py-2 px-5 z-50">
     <div>
         <a href="/"><x-application-logo class="w-20 h-20 fill-current text-gray-500" /></a>
     </div>

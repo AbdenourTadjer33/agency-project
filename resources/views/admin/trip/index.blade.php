@@ -35,7 +35,6 @@
             </a>
         </div>
 
-        @dump($trips)
         {{-- table --}}
         <div class="mt-4 relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -79,7 +78,7 @@
                             <th scope="row"
                                 class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <a class="underline" target="_blank"
-                                    href="{{ route('trip', ['slug' => $trip->slug]) }}">
+                                    href="{{ route('trip.show', ['slug' => $trip->slug]) }}">
                                     {{ $trip->name }}
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 inline-block" fill="#000000"
                                         viewBox="0 0 256 256">
@@ -92,14 +91,42 @@
 
                             {{-- category --}}
                             <td class="px-2 py-4">
-                                <span>{{ $trip->tripCategory->name }}</span>
+                                {{ $trip->tripCategory->name }}
                             </td>
 
                             {{-- description --}}
                             <td class="px-2 py-4">
-                                <span class="field">{!! Str::limit($trip->description, 20) !!}...</span>
+                                {{-- <span class="field">{!! $trip->description !!}...</span> --}}
+                                <span class="field" data-all="{{ $trip->description }}"
+                                    data-less="{{ Str::limit($trip->description, 40) }}">{{ Str::limit($trip->description, 40) }}</span>
+
+                                <span onclick="showMore(event)"
+                                    class="more select-none cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                    Plus
+                                </span>
+                                <span onclick="showLess(event)"
+                                    class="less hidden select-none cursor-pointer font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                                    Moins
+                                </span>
+                            </td>
+                            
+
+                            {{-- destination --}}
+                            <td class="px-2 py-6">
+                                {{ $trip->destination }}, {{ $trip->city }}
                             </td>
 
+                            {{-- Hotel --}}
+                            <td>
+                                {{ $trip->hotel->name }}
+                            </td>
+
+                            {{-- pricing --}}
+                            <td>
+                                <span class="block">Adult: {{ $trip->pricing->price_adult }} DA</span>
+                                <span class="block">enfant: {{ $trip->pricing->price_child }} DA</span>
+                                <span class="block">bébe: {{ $trip->pricing->price_baby }} DA</span>
+                            </td>
                         
                             {{-- created_at --}}
                             <td class="px-2 py-4">

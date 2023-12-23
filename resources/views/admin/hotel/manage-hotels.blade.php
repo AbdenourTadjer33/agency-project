@@ -28,11 +28,11 @@
 
             <!-- create button -->
             <a href="{{ route('admin.hotel.create') }}">
-            <button
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                type="button">
-                <a href="{{ route('admin.hotel.create') }}">Créer un nouveau hôtel</a>
-            </button>
+                <button
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    Créer un nouveau hôtel
+                 </button>
+            </a>
         </div>
 
         {{-- table --}}
@@ -80,9 +80,9 @@
                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
                                 {{-- name --}}
                                 <th scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <a class="underline" target="_blank"
-                                        href="{{ route('hotel', ['slug' => $hotel->slug]) }}">
+                                        href="{{ route('hotel.show', ['slug' => $hotel->slug]) }}">
                                         {{ $hotel->name }}
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 inline-block" fill="#000000"
                                             viewBox="0 0 256 256">

@@ -1,5 +1,6 @@
 {{-- top bar website --}}
 @php
+    $agence = Storage::json('private/Agency.json');
     $networks = $agence['networks'];
     $coordinates = $agence['coordinates'];
     $phones = [];
@@ -62,6 +63,9 @@
                             {{ __('Dashboard') }}
                         </x-dropdown-link>
                     @endif
+                    <x-dropdown-link :href="route('bookings')">
+                        {{ __('Mes réservations') }}
+                    </x-dropdown-link>
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

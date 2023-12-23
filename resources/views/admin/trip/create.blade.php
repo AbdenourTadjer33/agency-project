@@ -4,7 +4,6 @@
     <div class="mt-2 bg-gradient-to-tr from-purple-100 via-slate-200 to-stone-100 rounded shadow-2xl p-10">
         <form action="{{ route('admin.trip.store') }}" method="post" enctype="multipart/form-data">
             @csrf
-
             <div class="grid gap-4 mb-4 sm:grid-cols-3">
                 {{-- title --}}
                 <h1 class="sm:col-span-3 text-center text-3xl font-bold capitalize text-slate-800 mb-5">
@@ -36,7 +35,8 @@
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         <option>Sélectionnez la catégorie de voyage organisé</option>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option {{ old('category') === $category->id ? 'selected' : '' }}
+                                value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
 
@@ -53,15 +53,67 @@
                     <select id="formule_base" name="formule_base"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         <option>Sélectionnez la formule de base</option>
-                        <option value="LPD">petit déjeuner (LPD)</option>
-                        <option value="LDP">demi pension (LDP)</option>
-                        <option value="LPC">pension complète (LPC)</option>
+                        <option {{ old('formule_base') === 'LPD' ? 'selected' : '' }} value="LPD">petit déjeuner
+                            (LPD)</option>
+                        <option {{ old('formule_base') === 'LDP' ? 'selected' : '' }} value="LDP">demi pension (LDP)
+                        </option>
+                        <option {{ old('formule_base') === 'LPC' ? 'selected' : '' }} value="LPC">pension complète
+                            (LPC)</option>
                     </select>
 
                     @error('formule_base')
                         <div class="text-red-800 error">{{ $message }}</div>
                     @enderror
                 </div>
+                {{-- formula disponible --}}
+                {{-- <div>
+                    <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover"
+                        class="w-full text-sm font-medium text-gray-900 bg-white hover:bg-gray-50 focus:ring-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg px-5 py-2.5 text-center inline-flex items-center justify-between dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        type="button">Sélectionnez les formules disponible <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown menu -->
+                    <div id="dropdownBgHover" class="z-10 hidden bg-white rounded-lg shadow dark:bg-gray-700">
+                        <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                            aria-labelledby="dropdownBgHoverButton">
+                            <li>
+                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <input id="" type="checkbox" value=""
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                    <label for=""
+                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Default
+                                        checkbox</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <input checked id="" type="checkbox" value=""
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                    <label for=""
+                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Checked
+                                        state</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                    <input id="" type="checkbox" value=""
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                    <label for=""
+                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Default
+                                        checkbox</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    @error('formule_base')
+                        <div class="text-red-800 error">{{ $message }}</div>
+                    @enderror
+                </div> --}}
 
                 {{-- description --}}
                 <div class="sm:col-span-3">
@@ -71,6 +123,9 @@
                     <textarea id="description" rows="4" name="description"
                         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Description de voyage organisé">{{ old('description') }}</textarea>
+                    @error('description')
+                        <div class="text-red-800 error">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
 
@@ -82,6 +137,7 @@
                     </label>
                     <select id="destination" name="destination"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="null">Sélectionnez une destination</option>
                         @foreach (Storage::json('public/data/country_info.json') as $country)
                             <option {{ $country['name'] == old('country') ? 'selected' : '' }}
                                 value="{{ $country['name'] }}">
@@ -89,7 +145,7 @@
                             </option>
                         @endforeach
                     </select>
-                    @error('country')
+                    @error('destination')
                         <div class="text-red-800 error">{{ $message }}</div>
                     @enderror
                 </div>
@@ -107,7 +163,7 @@
                 </div>
 
                 {{-- dates --}}
-                <div class="sm:col-span-3">
+                <div class="sm:col-span-4">
                     <label class="block mb-2 text-sm font-medium text-gray-900">
                         Les dates proposés pour ce voyage oragnisé (*)
                         <span id="add-date"
@@ -116,7 +172,7 @@
                         </span>
                     </label>
 
-                    <div id="dates-container" data-len="1" class="mt-4 flex flex-col"> 
+                    <div id="dates-container" data-len="1" class="mt-4 flex flex-col">
                         <div date-rangepicker class="flex items-center mb-1">
                             <div class="relative">
                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -127,6 +183,7 @@
                                     </svg>
                                 </div>
                                 <input name="dates[1][departure]" type="text" datepicker
+                                    value="{{ old('dates.1.departure') }}"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Sélectionnez la date de début">
                             </div>
@@ -140,12 +197,25 @@
                                     </svg>
                                 </div>
                                 <input name="dates[1][return]" type="text" datepicker
+                                    value="{{ old('dates.1.return') }}"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Sélectionnez la date de fin">
                             </div>
                         </div>
                     </div>
-
+                    @php
+                        $errorDates = $errors->get('dates.*');
+                        if ($errorDates && $errorDates != []) {
+                            $errorDaparture = $errorDates['dates.1.departure'][0];
+                            $errorReturn = $errorDates['dates.1.return'][0];
+                        }
+                    @endphp
+                    @error('dates.*')
+                        <div class="flex items-center gap-10">
+                            <div class="text-red-800 error">{{ $errorDaparture }}</div>
+                            <div class="text-red-800 error">{{ $errorReturn }}</div>
+                        </div>
+                    @enderror
                 </div>
             </div>
 
@@ -224,16 +294,14 @@
                     </label>
                 </div>
 
-                {{-- hotel-slug --}}
+                {{-- hotel-id --}}
                 <div class="sm:col-span-2 {{ request()->get('on_my_hotels') == '1' ? '' : 'hidden' }}"
-                    id="hotel-slug">
-                    <select id="hotel_slug" name="hotel_slug"
+                    id="hotel-id">
+                    <select id="hotel-id" name="hotel_id"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         <option>Sélectionnez un hôtel</option>
                         @foreach ($hotels as $hotel)
-                            @if ($hotel->slug)
-                            <option value="{{ $hotel->slug }}">{{ $hotel->name }}</option>
-                            @endif
+                            <option value="{{ $hotel->id }}">{{ $hotel->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -248,7 +316,7 @@
                         </label>
                         <input type="text" id="hotel[name]" name="hotel[name]" value="{{ old('hotel[name]') }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        @error('name')
+                        @error('hotel.name')
                             <div class="text-red-800 error">{{ $message }}</div>
                         @enderror
                     </div>
@@ -283,6 +351,40 @@
                 <div class="grid gap-4 mb-4 sm:grid-cols-3">
                     {{-- country --}}
                     <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-900">
+                            Pays de l'hôtel
+                        </label>
+
+                        <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover"
+                            class="w-full text-sm font-medium text-gray-900 bg-white hover:bg-gray-50 focus:ring-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg px-5 py-2.5 text-center inline-flex items-center justify-between dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                            type="button">Sélectionnez un payes <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 4 4 4-4" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown menu -->
+                        <div id="dropdownBgHover" class="z-10 hidden bg-white rounded-lg shadow dark:bg-gray-700">
+                            <ul class="h-48 py-2 overflow-y-auto p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200 select-none"
+                                aria-labelledby="dropdownBgHoverButton">
+                                @foreach (Storage::json('public/data/country_info.json') as $country)
+                                    <li>
+                                        <div
+                                            class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                                            <input type="radio" value="{{ $country['name'] }}" id="{{ $country['name'] }}" name="hotel[country]"
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                            <label for="{{ $country['name'] }}"
+                                                class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
+                                                {{ $country['flag'] . '  ' . $country['name'] }}
+                                            </label>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    {{-- <div>
                         <label for="hotel[country]" class="block mb-2 text-sm font-medium text-gray-900">
                             Pays de l'hôtel
                         </label>
@@ -299,7 +401,7 @@
                         @error('hotel.country')
                             <div class="text-red-800 error">{{ $message }}</div>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     {{-- city --}}
                     <div>
@@ -308,7 +410,7 @@
                         </label>
                         <input type="text" id="hotel[city]" name='hotel[city]' value="{{ old('hotel.city') }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        @error('city')
+                        @error('hotel.city')
                             <div class="text-red-800 error">{{ $message }}</div>
                         @enderror
                     </div>
