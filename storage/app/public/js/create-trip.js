@@ -263,7 +263,7 @@ function createInputContainer(name, placeholder) {
 
 // add new hotel or select existing one
 const checkBox = document.querySelector("#on_my_hotels");
-const hotelSlug = document.querySelector("#hotel-slug");
+const hotelSlug = document.querySelector("#hotel-id");
 const hotelData = document.querySelector("#hotel-data");
 
 checkBox.onchange = (event) => {
