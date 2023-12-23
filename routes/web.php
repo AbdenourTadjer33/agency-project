@@ -1,51 +1,55 @@
 <?php
 
-use App\Http\Controllers\Admin\AgencyController;
-use App\Http\Controllers\Admin\HotelController;
-use App\Http\Controllers\Admin\TripController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Models\Hotel;
 use App\Models\Trip;
 use App\Models\User;
+use App\Models\Hotel;
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TicketingController;
+use App\Http\Controllers\TripController as ClientTripController;
+use App\Http\Controllers\HotelController as ClientHotelController;
+
+use App\Http\Controllers\Admin\TripController;
+use App\Http\Controllers\Admin\HotelController;
+use App\Http\Controllers\Admin\AgencyController;
+
+
 Route::get('/', function () {
-    $agence = Storage::json('private/Agency.json');
-    return view('welcome', ['agence' => $agence]);
+    return view('welcome');
 })->name('welcome');
 
-Route::get('/rich-text-editor', function () {
-    return view('rich-text-editor');
+Route::get('/login-temp', function() {
+    $user = User::first();
+    if (!$user->isAdmin()) {
+        $user->roleToAdmin();
+    }
+    Auth::login($user, true);
+    return redirect()->intended();
 });
 
-Route::get('/trips', function () {
-})->name('trips');
+Route::get('/trips', [ClientTripController::class, 'index'])->name('trips');
+Route::get('/trip/{slug}', [ClientTripController::class, 'show'])->name('trip.show');
+Route::post('/trip/{slug}', [ClientTripController::class, 'store'])->name('trip.store');
 
-Route::get('/trip/{slug}', function($slug) {
-    dd(Trip::where('slug', $slug));
-})->name('trip');
+Route::get('/hotels', [ClientHotelController::class, 'index'])->name('hotels');
+Route::get('/hotels/{slug}', [ClientHotelController::class, 'show'])->name('hotel.show');
+Route::post('/hotels/{slug}', [ClientHotelController::class, 'store'])->name('hotel.book');
 
-Route::get('/hotels', function () {
-    $agence = Storage::json('private/Agency.json');
-    $hotels = Hotel::all();
+Route::get('/ticketing', [TicketingController::class, 'create'])->name('ticketing');
+Route::post('/ticketing', [TicketingController::class, 'store'])->name('ticketing.store');
 
-    return view('hotels', [
-        'agence' => $agence,
-        'hotels' => $hotels
-    ]);
-})->name('hotels');
+Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings');
+Route::get('/my-bookings/{ref}', [BookingController::class, 'show'])->name('booking.show');
+Route::delete('/my-bookings/delete/{ref}', [BookingController::class, 'delete'])->name('booking.delete');
 
-Route::get('/hotels/{slug}', function ($slug) {
-    dd(Hotel::where('slug', $slug)->first());
-})->name('hotel');
 
-Route::get('/ticketing', function () {
-})->name('ticketing');
-
-Route::get('/contact', function () {
-})->name('contact');
-
+Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 
 
 
