@@ -78,9 +78,9 @@ class HotelController extends Controller
             'price_adult' => $request->price_adult,
             'price_child' => $request->price_child,
             'price_baby' => $request->price_baby,
-            'price_f1' => $request->price_f1,
-            'price_f2' => $request->price_f2,
-            'price_f3' => $request->price_f3,
+            'price_lpd' => $request->price_f1,
+            'price_ldp' => $request->price_f2,
+            'price_lpc' => $request->price_f3,
         ]);
 
         return redirect(route('admin.hotel.show', ['id' => $hotel->id]))->with('status', 'Hôtel créer avec succés');

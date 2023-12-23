@@ -41,10 +41,10 @@ class TripController extends Controller
     {
         $request->validate([
             'name' => ['required', 'min:2'],
-            'category' => ['required'],
+            'category' => ['required', Rule::exists('trip_categories', 'id')],
             'formule_base' => ['required', Rule::in(['LPD', 'LDP', 'LPC'])],
             'description' => ['required'],
-            'destination' => ['required'],
+            'destination' => ['required', Rule::notIn('null')],
             'city' => ['required'],
             'dates' => ['required', 'array'],
             'dates.*' => ['required', 'array'],
@@ -56,9 +56,8 @@ class TripController extends Controller
             'assets' => ['required', 'array', 'min:1', 'max:10'],
             'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg', 'max:2048'],
         ]);
-
         if ($request->get('on_my_hotels') === "on") {
-            $hotel = Hotel::findOrfail($request->hotel_slug);
+            $hotel = Hotel::findOrfail($request->hotel_id);
         } else {
             $validator = Validator::make($request->all(), [
                 'hotel' => ['required', 'array'],
@@ -80,22 +79,21 @@ class TripController extends Controller
                 'classification' => $request->hotel['classification'],
             ]);
 
-            if ($request->hotel['country']) {
+            if (!empty($request->hotel['country'])) {
                 $hotel->country = $request->hotel['country'];
-                $hotel->save();
-            };
-            if ($request->hotel['city']) {
+            }
+            if (!empty($request->hotel['city'])) {
                 $hotel->city = $request->hotel['city'];
-                $hotel->save();
-            };
-            if ($request->hotel['address']) {
+            }
+            if (!empty($request->hotel['address'])) {
                 $hotel->address = $request->hotel['address'];
-                $hotel->save();
-            };
-            if ($request->hotel['services']) {
+            }
+            if (!empty($request->hotel['services'])) {
                 $hotel->services = json_encode($request->hotel['services']);
+            }
+            if (!empty($request->hotel['country']) || !empty($request->hotel['city']) || !empty($request->hotel['address']) || !empty($request->hotel['services'])) {
                 $hotel->save();
-            };
+            }
         }
 
         $assets = $request->file('assets');

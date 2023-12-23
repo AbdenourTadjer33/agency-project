@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Agency;
 use App\Models\AgencyCoordinate;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -12,7 +13,11 @@ class AgencyController extends Controller
 {
     public function index()
     {
-        return view('admin.agency.index');
+        return view('admin.agency.index', [
+            'agency' => Agency::first(),
+            'coordinates' => AgencyCoordinate::all(),
+            'admins' => User::where('role', 'admin')->get(),
+        ]);
     }
 
     public function editNetworks()
