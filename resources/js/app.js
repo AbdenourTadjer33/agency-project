@@ -1,4 +1,5 @@
 import './bootstrap';
+import './front-component';
 
 import Alpine from 'alpinejs';
 
