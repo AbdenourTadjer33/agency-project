@@ -37,6 +37,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(VerificationCode::class);
     }
 
+    public function bookings() : HasMany 
+    {
+        return $this->hasMany(Booking::class);
+    }
+
 
     public $incrementing = false;
     protected $primaryKey = 'uuid';
@@ -54,6 +59,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role === 'client';
     }
 
+    public function roleToAdmin() {
+        $this->role = 'admin';
+        $this->save();
+    }
 
     /**
      * The attributes that should be hidden for serialization.

@@ -14,9 +14,13 @@ class Pricing extends Model
         'price_adult',
         'price_child',
         'price_baby',
-        'price_f1',
-        'price_f2',
-        'price_f3',
+        'price_lpd',
+        'price_ldp',
+        'price_lpc',
+        'price_single',
+        'price_double',
+        'price_triple',
+        'price_quadruple',
     ];
 
     public $timestamps = false;
