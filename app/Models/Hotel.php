@@ -25,7 +25,7 @@ class Hotel extends Model
         'assets',
     ];
 
-    public $cast = [
+    protected $casts = [
         'coordinates' => 'array',
         'services' => 'array',
         'assets' => 'array',

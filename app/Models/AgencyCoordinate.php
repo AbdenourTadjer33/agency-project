@@ -23,8 +23,8 @@ class AgencyCoordinate extends Model
         return $this->belongsTo(Agency::class);
     }
     
-    public $cast = [
-        'coordiantes' => 'array',
+    protected $casts = [
+        'coordinates' => 'array',
     ];
 
 

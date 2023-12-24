@@ -14,7 +14,7 @@ class Agency extends Model
         'networks',
     ];
 
-    public $cast = [
+    protected $casts = [
         'networks' => 'array',
     ];
 

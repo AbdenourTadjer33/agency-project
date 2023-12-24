@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\RandomId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -30,6 +30,11 @@ class Booking extends Model
         'price'
     ];
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_uuid', 'uuid');
+    }
+
     public function ticketing(): HasOne
     {
         return $this->hasOne(BookingTicketing::class);
@@ -50,7 +55,7 @@ class Booking extends Model
         return $this->morphTo();
     }
     
-    public $cast = [
+    protected $casts = [
         'beneficiaries' => 'array',
     ];
 }

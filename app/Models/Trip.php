@@ -25,7 +25,7 @@ class Trip extends Model
         'hotel_id',
     ];
 
-    public $cast = [
+    protected $casts = [
         'assets' => 'array',
     ];
 
