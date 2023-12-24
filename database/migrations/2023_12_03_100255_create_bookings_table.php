@@ -19,7 +19,7 @@ return new class extends Migration
             $table->nullableMorphs('bookingable');
             $table->date('date_departure');
             $table->date('date_return')->nullable();
-            $table->enum('status', ['validé', 'non-validé', 'annulé'])->nullable();
+            $table->enum('status', ['validé', 'non-validé', 'annulé', 'accepté', 'non-accepté'])->nullable();
             $table->string('number_adult');
             $table->string('number_child');
             $table->string('number_baby');
