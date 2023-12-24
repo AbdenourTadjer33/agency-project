@@ -72,15 +72,17 @@
                 </x-slot>
             </x-dropdown>
         @else
-            <div class="mr-2">
-                <button class="bg-sky-500 py-2 px-4 rounded">
-                    <a href="{{ route('login') }}">Login</a>
-                </button>
-            </div>
-            <div>
-                <button class="bg-sky-500 py-2 px-4 rounded">
-                    <a href="{{ route('register') }}">Register</a>
-                </button>
+            <div class="flex gap-2">
+                <a href="{{ route('login') }}">
+                    <button class="bg-sky-500 py-2 px-4 rounded-lg w-32 text-sm text-gray-800 hover:bg-sky-600">
+                        Login
+                    </button>
+                </a>
+                <a href="{{ route('register') }}">
+                    <button class="bg-sky-500 py-2 px-4 rounded-lg w-32 text-sm text-gray-800 hover:bg-sky-600">
+                        Register
+                    </button>
+                </a>
             </div>
         @endauth
     </div>
