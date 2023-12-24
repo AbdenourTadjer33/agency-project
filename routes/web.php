@@ -3,28 +3,32 @@
 use App\Models\Trip;
 use App\Models\User;
 use App\Models\Hotel;
-
-use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketingController;
-use App\Http\Controllers\TripController as ClientTripController;
-use App\Http\Controllers\HotelController as ClientHotelController;
-
 use App\Http\Controllers\Admin\TripController;
 use App\Http\Controllers\Admin\HotelController;
+use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\AgencyController;
+use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\TripController as ClientTripController;
+use App\Http\Controllers\HotelController as ClientHotelController;
+use App\Http\Controllers\BookingController as ClientBookingController;
 
+Route::get('/', function (Request $request) {
 
-Route::get('/', function () {
+    if (Auth::check() && !$request->user()->hasVerifiedEmail()) {
+        return redirect(route('verification.notice'));
+    }
+
     return view('welcome');
 })->name('welcome');
 
-Route::get('/login-temp', function() {
+Route::get('/login-temp', function () {
     $user = User::first();
     if (!$user->isAdmin()) {
         $user->roleToAdmin();
@@ -44,9 +48,9 @@ Route::post('/hotels/{slug}', [ClientHotelController::class, 'store'])->name('ho
 Route::get('/ticketing', [TicketingController::class, 'create'])->name('ticketing');
 Route::post('/ticketing', [TicketingController::class, 'store'])->name('ticketing.store');
 
-Route::get('/my-bookings', [BookingController::class, 'index'])->name('bookings');
-Route::get('/my-bookings/{ref}', [BookingController::class, 'show'])->name('booking.show');
-Route::delete('/my-bookings/delete/{ref}', [BookingController::class, 'delete'])->name('booking.delete');
+Route::get('/my-bookings', [ClientBookingController::class, 'index'])->name('bookings');
+Route::get('/my-bookings/{ref}', [ClientBookingController::class, 'show'])->name('booking.show');
+Route::delete('/my-bookings/delete/{ref}', [ClientBookingController::class, 'delete'])->name('booking.delete');
 
 
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
@@ -91,7 +95,7 @@ Route::middleware('auth', 'verified', 'role:admin')->prefix('admin')->group(func
         Route::post('/agency/edit-coordinates', 'updateCoordinates')->name('admin.agency.updateCoordinates');
         Route::delete('/agency/delete-sub-agence/{id}', 'deleteCoordinate')->name('admin.agency.deleteCoordinates');
     });
-    
+
     // trips
     Route::controller(TripController::class)->group(function () {
         Route::get('/trips', 'index')->name('admin.trips');
@@ -110,6 +114,18 @@ Route::middleware('auth', 'verified', 'role:admin')->prefix('admin')->group(func
         Route::get('/hotels/{id}', 'show')->name('admin.hotel.show');
         Route::delete('/hotels/{id}', 'delete')->name('admin.hotel.delete');
     });
+
+    // booking management
+    Route::controller(BookingController::class)->group(function () {
+        Route::get('/booking', 'index')->name('admin.bookings');
+        Route::get('/booking/{ref}', 'show')->name('admin.booking.show');
+        Route::post('/booking/{ref}/accept', 'acceptBooking')->name('admin.booking.accept');
+        Route::post('/booking/{ref}/refuse', 'refuseBooking')->name('admin.booking.refuse');
+    });
+
+    Route::controller(InboxController::class)->group(function () {
+        Route::get('/inbox', 'index')->name('admin.inboxs');
+    });
 });
 
 Route::middleware('auth', 'verified')->group(function () {
@@ -117,6 +133,5 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 
 require __DIR__ . '/auth.php';
