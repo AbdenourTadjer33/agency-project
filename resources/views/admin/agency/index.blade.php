@@ -47,7 +47,7 @@
             </thead>
 
             <tbody>
-                @foreach (json_decode($agency->networks, true) as $network => $link)
+                @foreach ($agency->networks as $network => $link)
                     <tr
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
                         <th scope="row"
@@ -156,12 +156,12 @@
 
                         {{-- tél --}}
                         <td class="px-2 py-4">
-                            {{ json_decode($coordinate->coordinates)->phone }}
+                            {{ $coordinate->coordinates['phone'] }}
                         </td>
 
                         {{-- email --}}
                         <td class="px-2 py-4">
-                            {{ json_decode($coordinate->coordinates)->email }}
+                            {{ $coordinate->coordinates['email'] }}
                         </td>
                     </tr>
                 @endforeach

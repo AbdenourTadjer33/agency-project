@@ -82,10 +82,18 @@
                                 </td>
                                 {{-- status --}}
                                 <td class="px-2 py-4">
-                                    {{ $booking->status }}
+                                    @if ($booking->status)
+                                        <div class="flex items-center">
+                                            <div
+                                                class="h-2.5 w-2.5 rounded-full {{ $booking->status == 'validé' ? 'bg-green-500' : 'bg-red-500' }} me-2">
+                                            </div>
+                                            {{ $booking->status }}
+                                        </div>
+                                    @endif
                                 </td>
+                                {{-- price --}}
                                 <td>
-                                    {{ $booking->price }}
+                                    {{ $booking->price ? $booking->price . ' DA' : '' }}
                                 </td>
                                 {{-- created at --}}
                                 <td class="px-2 py-4">
@@ -204,7 +212,8 @@
                 <h3 class="text-lg font-medium">N'hésiter pas à nous contacter</h3>
             </div>
             <div class="mt-2 mb-4 text-sm">
-                Si vous voulez des informations suplémentaire sur quoi que ce soit n'hésiter pas à nous contacter via notre formulaire de contact ou nous passer un cout de fil.
+                Si vous voulez des informations suplémentaire sur quoi que ce soit n'hésiter pas à nous contacter via
+                notre formulaire de contact ou nous passer un cout de fil.
             </div>
         </div>
 </x-app-layout>

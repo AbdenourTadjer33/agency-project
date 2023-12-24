@@ -10,8 +10,9 @@
     @endif
 
     @php
-        $beneficiaries = json_decode($booking->beneficiaries);
+        $formule = ['LPD' => 'Petit déjuner', 'LDP' => 'Demi pension', 'LPC' => 'Pension compléte'];
     @endphp
+
     {{-- billeterie commande --}}
     @if ($booking->type == 'ticketing')
         <div
@@ -112,66 +113,66 @@
                         </div>
                         <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
 
-                        @foreach ($beneficiaries->adult as $adult)
+                        @foreach ($booking->beneficiaries['adult'] as $adult)
                             <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    Prénom adulte : <span class="font-bold">{{ $adult->fname }}</span>
+                                    Prénom adulte : <span class="font-bold">{{ $adult['fname'] }}</span>
                                 </h5>
 
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    Nom adulte : <span class="font-bold">{{ $adult->lname }}</span>
+                                    Nom adulte : <span class="font-bold">{{ $adult['lname'] }}</span>
                                 </h5>
 
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    Date de naissance adulte : <span class="font-bold">{{ $adult->dob }}</span>
+                                    Date de naissance adulte : <span class="font-bold">{{ $adult['dob'] }}</span>
                                 </h5>
 
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    N° passport : <span class="font-bold">{{ $adult->passport_id }}</span>
+                                    N° passport : <span class="font-bold">{{ $adult['passport_id'] }}</span>
                                 </h5>
                             </div>
                         @endforeach
 
-                        @if ($beneficiaries->child)
+                        @if ($booking->beneficiaries['child'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($beneficiaries->child as $child)
+                            @foreach ($booking->beneficiaries['child'] as $child)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Prénom Enfant : <span class="font-bold">{{ $adult->fname }}</span>
+                                        Prénom Enfant : <span class="font-bold">{{ $child['fname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Nom Enfant : <span class="font-bold">{{ $adult->lname }}</span>
+                                        Nom Enfant : <span class="font-bold">{{ $child['lname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Date de naissance Enfant : <span class="font-bold">{{ $adult->dob }}</span>
+                                        Date de naissance Enfant : <span class="font-bold">{{ $child['dob'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        N° passport : <span class="font-bold">{{ $adult->passport_id }}</span>
+                                        N° passport : <span class="font-bold">{{ $child['passport_id'] }}</span>
                                     </h5>
                                 </div>
                             @endforeach
                         @endif
-                        @if ($beneficiaries->baby)
+                        @if ($booking->beneficiaries['baby'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($beneficiaries->baby as $baby)
+                            @foreach ($booking->beneficiaries['baby'] as $baby)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Prénom Bébe : <span class="font-bold">{{ $adult->fname }}</span>
+                                        Prénom Bébe : <span class="font-bold">{{ $baby['fname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Nom Bébe : <span class="font-bold">{{ $adult->lname }}</span>
+                                        Nom Bébe : <span class="font-bold">{{ $baby['lname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Date de naissance Bébe : <span class="font-bold">{{ $adult->dob }}</span>
+                                        Date de naissance Bébe : <span class="font-bold">{{ $baby['dob'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        N° passport : <span class="font-bold">{{ $adult->passport_id }}</span>
+                                        N° passport : <span class="font-bold">{{ $baby['passport_id'] }}</span>
                                     </h5>
                                 </div>
                             @endforeach
@@ -257,7 +258,7 @@
                 </h5>
 
                 <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
-                    formule : <span class="font-bold">{{ $booking->bookingTrip->formule }}</span>
+                    formule : <span class="font-bold">{{ $formule[$booking->bookingTrip->formule] }}</span>
                     <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
                 </h5>
 
@@ -295,65 +296,65 @@
                         </div>
                         <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
 
-                        @foreach ($beneficiaries->adult as $adult)
+                        @foreach ($booking->beneficiaries['adult'] as $adult)
                             <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    Prénom adulte : <span class="font-bold">{{ $adult->fname }}</span>
+                                    Prénom adulte : <span class="font-bold">{{ $adult['fname'] }}</span>
                                 </h5>
 
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    Nom adulte : <span class="font-bold">{{ $adult->lname }}</span>
+                                    Nom adulte : <span class="font-bold">{{ $adult['lname'] }}</span>
                                 </h5>
 
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    Date de naissance adulte : <span class="font-bold">{{ $adult->dob }}</span>
+                                    Date de naissance adulte : <span class="font-bold">{{ $adult['dob'] }}</span>
                                 </h5>
 
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    N° passport : <span class="font-bold">{{ $adult->passport_id }}</span>
+                                    N° passport : <span class="font-bold">{{ $adult['passport_id'] }}</span>
                                 </h5>
                             </div>
                         @endforeach
-                        @if ($beneficiaries->child)
+                        @if ($booking->beneficiaries['child'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($beneficiaries->child as $child)
+                            @foreach ($booking->beneficiaries['child'] as $child)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Prénom Enfant : <span class="font-bold">{{ $adult->fname }}</span>
+                                        Prénom Enfant : <span class="font-bold">{{ $child['fname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Nom Enfant : <span class="font-bold">{{ $adult->lname }}</span>
+                                        Nom Enfant : <span class="font-bold">{{ $child['lname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Date de naissance Enfant : <span class="font-bold">{{ $adult->dob }}</span>
+                                        Date de naissance Enfant : <span class="font-bold">{{ $child['dob'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        N° passport : <span class="font-bold">{{ $adult->passport_id }}</span>
+                                        N° passport : <span class="font-bold">{{ $child['passport_id'] }}</span>
                                     </h5>
                                 </div>
                             @endforeach
                         @endif
-                        @if ($beneficiaries->baby)
+                        @if ($booking->beneficiaries['baby'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($beneficiaries->baby as $baby)
+                            @foreach ($booking->beneficiaries['baby'] as $baby)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Prénom Bébe : <span class="font-bold">{{ $adult->fname }}</span>
+                                        Prénom Bébe : <span class="font-bold">{{ $baby['fname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Nom Bébe : <span class="font-bold">{{ $adult->lname }}</span>
+                                        Nom Bébe : <span class="font-bold">{{ $baby['lname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Date de naissance Bébe : <span class="font-bold">{{ $adult->dob }}</span>
+                                        Date de naissance Bébe : <span class="font-bold">{{ $baby['dob'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        N° passport : <span class="font-bold">{{ $adult->passport_id }}</span>
+                                        N° passport : <span class="font-bold">{{ $baby['passport_id'] }}</span>
                                     </h5>
                                 </div>
                             @endforeach
@@ -395,34 +396,7 @@
                 </div>
             </div>
 
-            <div class="grid gap-4 mb-4 sm:grid-cols-3">
-                <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
-                    Hôtel situé à : <span
-                        class="font-bold">{{ $booking->bookingable->country . ', ' . $booking->bookingable->city }}</span>
-                    <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
-                </h5>
-
-                <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
-                    @php
-                        $diff = date_diff(date_create($booking->date_departure), date_create($booking->date_return));
-
-                    @endphp
-                    Durré : <span
-                        class="font-bold">{{ $diff->days . ' jours et ' . $diff->days - 1 . 'nuitée' }}</span>
-                    <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
-                </h5>
-            </div>
-            <div class="grid gap-4 mb-4 sm:grid-cols-3">
-                <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
-                    Checkin : <span class="font-bold">{{ $booking->date_departure }}</span>
-                    <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
-                </h5>
-
-                <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
-                    Checkout : <span class="font-bold">{{ $booking->date_return }}</span>
-                    <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
-                </h5>
-            </div>
+            
             <div class="grid gap-4 mb-4 sm:grid-cols-3">
                 <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
                     hôtel :
@@ -437,12 +411,31 @@
                     </svg>
                     <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
                 </h5>
-
                 <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
-                    formule : <span class="font-bold">{{ $booking->bookingHotel->formule }}</span>
+                    formule : <span class="font-bold">{{ $formule[$booking->bookingHotel->formule] }}</span>
                     <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
                 </h5>
+                <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
+                    @php
+                        $diff = date_diff(date_create($booking->date_departure), date_create($booking->date_return));
 
+                    @endphp
+                    Durré : <span
+                        class="font-bold">{{ $diff->days . ' jours et ' . $diff->days - 1 . 'nuitée' }}</span>
+                    <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
+                </h5>
+                <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
+                    Checkin : <span class="font-bold">{{ $booking->date_departure }}</span>
+                    <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
+                </h5>
+                <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
+                    Checkout : <span class="font-bold">{{ $booking->date_return }}</span>
+                    <hr class="h-px my-2 mx-2 bg-gray-200 border-0 dark:bg-gray-700">
+                </h5>
+                <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white sm:col-span-2">
+                    Adresse : <span
+                        class="font-bold">{{ $booking->bookingable->address . ', ' . $booking->bookingable->city . ', ' . $booking->bookingable->country }}</span>
+                </h5>
             </div>
 
             {{-- Bénéficiaire --}}
@@ -477,65 +470,65 @@
                         </div>
                         <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
 
-                        @foreach ($beneficiaries->adult as $adult)
+                        @foreach ($booking->beneficiaries['adult'] as $adult)
                             <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    Prénom adulte : <span class="font-bold">{{ $adult->fname }}</span>
+                                    Prénom adulte : <span class="font-bold">{{ $adult['fname'] }}</span>
                                 </h5>
 
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    Nom adulte : <span class="font-bold">{{ $adult->lname }}</span>
+                                    Nom adulte : <span class="font-bold">{{ $adult['lname'] }}</span>
                                 </h5>
 
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    Date de naissance adulte : <span class="font-bold">{{ $adult->dob }}</span>
+                                    Date de naissance adulte : <span class="font-bold">{{ $adult['dob'] }}</span>
                                 </h5>
 
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                    N° passport : <span class="font-bold">{{ $adult->passport_id }}</span>
+                                    N° passport : <span class="font-bold">{{ $adult['passport_id'] }}</span>
                                 </h5>
                             </div>
                         @endforeach
-                        @if ($beneficiaries->child)
+                        @if ($booking->beneficiaries['child'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($beneficiaries->child as $child)
+                            @foreach ($booking->beneficiaries['child'] as $child)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Prénom Enfant : <span class="font-bold">{{ $adult->fname }}</span>
+                                        Prénom Enfant : <span class="font-bold">{{ $child['fname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Nom Enfant : <span class="font-bold">{{ $adult->lname }}</span>
+                                        Nom Enfant : <span class="font-bold">{{ $child['lname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Date de naissance Enfant : <span class="font-bold">{{ $adult->dob }}</span>
+                                        Date de naissance Enfant : <span class="font-bold">{{ $child['dob'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        N° passport : <span class="font-bold">{{ $adult->passport_id }}</span>
+                                        N° passport : <span class="font-bold">{{ $child['passport_id'] }}</span>
                                     </h5>
                                 </div>
                             @endforeach
                         @endif
-                        @if ($beneficiaries->baby)
+                        @if ($booking->beneficiaries['baby'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($beneficiaries->baby as $baby)
+                            @foreach ($booking->beneficiaries['baby'] as $baby)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Prénom Bébe : <span class="font-bold">{{ $adult->fname }}</span>
+                                        Prénom Bébe : <span class="font-bold">{{ $baby['fname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Nom Bébe : <span class="font-bold">{{ $adult->lname }}</span>
+                                        Nom Bébe : <span class="font-bold">{{ $baby['lname'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        Date de naissance Bébe : <span class="font-bold">{{ $adult->dob }}</span>
+                                        Date de naissance Bébe : <span class="font-bold">{{ $baby['dob'] }}</span>
                                     </h5>
 
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
-                                        N° passport : <span class="font-bold">{{ $adult->passport_id }}</span>
+                                        N° passport : <span class="font-bold">{{ $baby['passport_id'] }}</span>
                                     </h5>
                                 </div>
                             @endforeach

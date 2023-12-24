@@ -147,7 +147,7 @@
                                                 d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z">
                                             </path>
                                         </svg>
-                                        <span class="font-medium">{{ json_decode($hotel->coordinates)->email }}</span>
+                                        <span class="font-medium">{{ $hotel->coordinates['email'] }}</span>
                                     </div>
                                     <div>
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 inline-block" fill="#000000"
@@ -157,7 +157,7 @@
                                             </path>
                                         </svg>
                                         <span class="font-medium">
-                                            {{ json_decode($hotel->coordinates)->phone }}</span>
+                                            {{ $hotel->coordinates['phone'] }}</span>
                                     </div>
                                 </td>
 
@@ -237,7 +237,7 @@
                                                         class="flex justify-between mb-1 text-gray-500 dark:text-gray-400">
                                                         {{-- my content --}}
                                                         <div class="flex flex-wrap">
-                                                            @foreach (json_decode($hotel->services) as $service)
+                                                            @foreach ($hotel->services as $service)
                                                                 <span
                                                                     class="bg-indigo-100 text-indigo-800 text-xs font-medium m-0.5 px-2.5 py-1 rounded dark:bg-indigo-900 dark:text-indigo-300">
                                                                     {{ $service }}

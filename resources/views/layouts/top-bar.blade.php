@@ -9,7 +9,7 @@
         $phones[] = $value['phone'];
         $emails[] = $value['email'];
     }
-    
+
     $logos = [
         'instagram' => asset('storage/icons/instagram-logo.svg'),
         'facebook' => asset('storage/icons/facebook-logo.svg'),
@@ -18,7 +18,7 @@
     ];
 @endphp
 
-<div class="bg-gradient-to-r from-cyan-500 to-blue-500 w-full h-16 py-2 px-5 flex justify-between">
+<div class="bg-gradient-to-r from-cyan-500 to-blue-500 w-full h-16 py-2 px-5 flex items-center justify-between">
     <div class="flex items-center">
         <ul class="flex items-center">
             <li><img src="{{ asset('storage/icons/phone.svg') }}"></li>
@@ -35,22 +35,15 @@
         </div>
     </div>
 
-    <div class="flex">
+    <div>
         @auth
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
                     <button
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                        <img src="https://ui-avatars.com/api/?name={{ Auth::user()->first_name . '+' . Auth::user()->last_name }}"
-                            class="rounded-full w-8 mr-3" alt="avatar">
-                        <div>{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</div>
-                        <div class="ms-1">
-                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                        </div>
+                        class="inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 px-3 py-2 border border-transparent text-sm leading-4 font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <span class="font-medium text-gray-600 dark:text-gray-300 ">
+                            {{ strtoupper(substr(Auth::user()->first_name, 0, 1) . substr(Auth::user()->last_name, 0, 1)) }}
+                        </span>
                     </button>
                 </x-slot>
 
