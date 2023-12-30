@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BookingTicketing;
+use App\Events\NewBooking;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -57,7 +59,7 @@ class TicketingController extends Controller
 
 
         $booking = $request->user()->bookings()->create([
-            'ref' => Booking::randomId(),
+            'ref' => Booking::randomId('ref'),
             'type' => 'ticketing',
             'date_departure' => $request->flight_type === 'AS' ? $request->only_departure : $request->date_departure,
             'date_return' => $request->flight_type === 'AS' ? null : $request->date_return,
@@ -72,7 +74,7 @@ class TicketingController extends Controller
             'observation' => $request->message,
         ]);
         
-        $booking->ticketing()->create([
+        $bookingTicketing = $booking->ticketing()->create([
             'flight_type' => $request->flight_type,
             'airport_departure' => $request->airport_departure,
             'airport_arrived' => $request->airport_arrived,
@@ -80,7 +82,10 @@ class TicketingController extends Controller
             'class' => $request->class,
         ]);
 
-        
+
+        event(New NewBooking($request->user, $booking)); //send notif to Admin
+        event(New BookingTicketing($request->user(), $booking, $bookingTicketing)); // send email to user that contains booking informations
+
         return redirect(route('booking.show', ['ref' => $booking->ref]))->with('status', 'Votre demande de billet à été effectuer avec succés.');
     }
 }
