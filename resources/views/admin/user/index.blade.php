@@ -1,6 +1,7 @@
 <x-admin-layout>
+    {{-- filter --}}
+    <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between">
 
-    <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
         <label for="table-search" class="sr-only">Search</label>
         <div class="relative">
             <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
@@ -16,17 +17,10 @@
                 placeholder="Search for items">
         </div>
 
-        <!-- create button -->
-        <a href="{{ route('admin.hotel.create') }}">
-            <button
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                Créer un nouveau hôtel
-            </button>
-        </a>
     </div>
 
     @if (session('status'))
-        <div class="p-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+        <div class="p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
             role="alert">
             <span class="font-medium">{{ session('status') }}</span>
         </div>
@@ -45,42 +39,38 @@
                         COORDONNÉES
                     </th>
                     <th scope="col" class="px-2 py-3">
-                        Objet
+                        Date de naissance
                     </th>
                     <th scope="col" class="px-2 py-3">
-                        Message
+                        Sexe
                     </th>
                     <th scope="col" class="px-2 py-3">
-                        Envoyé le
+                        créer à
                     </th>
                     <th scope="col" class="px-2 py-3">
-                        action
+                        N° réservation
                     </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($contacts as $contact)
+                @foreach ($users as $user)
                     <tr
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
                         <th scope="row"
                             class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            @if ($contact->user_uuid)
-                                <a class="underline" target="_blank" href="#">
-                                    {{ $contact->user_uuid }}
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 inline-block" fill="#000000"
-                                        viewBox="0 0 256 256">
-                                        <path
-                                            d="M137.54,186.36a8,8,0,0,1,0,11.31l-9.94,10A56,56,0,0,1,48.38,128.4L72.5,104.28A56,56,0,0,1,149.31,102a8,8,0,1,1-10.64,12,40,40,0,0,0-54.85,1.63L59.7,139.72a40,40,0,0,0,56.58,56.58l9.94-9.94A8,8,0,0,1,137.54,186.36Zm70.08-138a56.08,56.08,0,0,0-79.22,0l-9.94,9.95a8,8,0,0,0,11.32,11.31l9.94-9.94a40,40,0,0,1,56.58,56.58L172.18,140.4A40,40,0,0,1,117.33,142,8,8,0,1,0,106.69,154a56,56,0,0,0,76.81-2.26l24.12-24.12A56.08,56.08,0,0,0,207.62,48.38Z">
-                                        </path>
-                                    </svg>
-                                </a>
-                            @else
-                                Non authentifié
-                            @endif
+                            <a class="underline" target="_blank" href="#">
+                                {{ $user->uuid }}
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 inline-block" fill="#000000"
+                                    viewBox="0 0 256 256">
+                                    <path
+                                        d="M137.54,186.36a8,8,0,0,1,0,11.31l-9.94,10A56,56,0,0,1,48.38,128.4L72.5,104.28A56,56,0,0,1,149.31,102a8,8,0,1,1-10.64,12,40,40,0,0,0-54.85,1.63L59.7,139.72a40,40,0,0,0,56.58,56.58l9.94-9.94A8,8,0,0,1,137.54,186.36Zm70.08-138a56.08,56.08,0,0,0-79.22,0l-9.94,9.95a8,8,0,0,0,11.32,11.31l9.94-9.94a40,40,0,0,1,56.58,56.58L172.18,140.4A40,40,0,0,1,117.33,142,8,8,0,1,0,106.69,154a56,56,0,0,0,76.81-2.26l24.12-24.12A56.08,56.08,0,0,0,207.62,48.38Z">
+                                    </path>
+                                </svg>
+                            </a>
                         </th>
                         {{-- full name --}}
                         <th class="px-2 py-4">
-                            {{ $contact->full_name }}
+                            {{ $user->first_name . ' ' . $user->last_name }}
                         </th>
                         {{-- coordinates --}}
                         <th class="px-2 py-4">
@@ -91,7 +81,7 @@
                                         d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z">
                                     </path>
                                 </svg>
-                                <span class="font-medium">{{ $contact->email }}</span>
+                                <span class="font-medium">{{ $user->email }}</span>
                             </div>
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 inline-block" fill="#000000"
@@ -101,29 +91,32 @@
                                     </path>
                                 </svg>
                                 <span class="font-medium">
-                                    {{ $contact->phone }}</span>
+                                    {{ $user->phone }}</span>
                             </div>
                         </th>
                         {{-- objet --}}
                         <th class="px-2 py-4">
-                            {{ $contact->objet }}
+                            {{ $user->dob }}
                         </th>
                         {{-- Message --}}
                         <th class="px-2 py-4">
-                            {{ $contact->message }}
+                            {{ $user->sex }}
                         </th>
                         {{-- created_at --}}
                         <th class="px-2 py-4">
-                            {{ $contact->created_at }}
+                            {{ $user->created_at }}
                         </th>
-                        {{-- actions --}}
-                        <th class="px-2 py-4"></th>
-
+                        {{-- counts --}}
+                        <th class="px-2 py-4 text-center">
+                            {{ $user->bookings_count }}
+                        </th>
                     </tr>
                 @endforeach
             </tbody>
-
-
         </table>
+    </div>
+
+    <div class="py-4">
+        {{ $users }}
     </div>
 </x-admin-layout>

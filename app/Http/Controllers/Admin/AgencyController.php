@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Agency;
-use App\Models\AgencyCoordinate;
-use App\Models\User;
+use App\Models\{Agency, AgencyCoordinate, User};
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 

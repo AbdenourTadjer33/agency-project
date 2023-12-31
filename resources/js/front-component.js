@@ -4,6 +4,9 @@ import DateRangePicker from "flowbite-datepicker/DateRangePicker";
 import fr from "flowbite-datepicker/locales/fr";
 import Chart from "chart.js/auto";
 
+import { Dropdown } from "flowbite";
+
+window.Dropdown = Dropdown;
 window.Chart = Chart;
 
 document.querySelectorAll("[datepicker]").forEach((datepickerEl) => {

@@ -16,7 +16,7 @@ class BookingTicketing extends Model
         'airport_departure',
         'airport_arrived',
         'compagnie',
-        'class'
+        'class',
     ];
 
     public function booking() : BelongsTo

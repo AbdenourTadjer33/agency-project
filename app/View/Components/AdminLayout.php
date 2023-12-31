@@ -2,8 +2,9 @@
 
 namespace App\View\Components;
 
-use Illuminate\View\Component;
 use Illuminate\View\View;
+use Illuminate\View\Component;
+use Illuminate\Support\Facades\Auth;
 
 class AdminLayout extends Component
 {
@@ -12,6 +13,8 @@ class AdminLayout extends Component
      */
     public function render(): View
     {
-        return view('layouts.admin');
+        return view('layouts.admin', [
+            'notifications' => Auth::user()->notifications()->with('notifiable:uuid,first_name,last_name')->get(),
+        ]);
     }
 }

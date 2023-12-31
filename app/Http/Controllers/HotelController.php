@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BookingHotel;
 use App\Models\Hotel;
 
 use App\Models\Booking;
-use App\Traits\HttpResponses;
+use App\Events\NewBooking;
 use Illuminate\Http\Request;
+use App\Traits\HttpResponses;
 use Illuminate\Validation\Rule;
 
 class HotelController extends Controller
@@ -68,7 +70,7 @@ class HotelController extends Controller
 
         $booking = $hotel->booking()->create([
             'user_uuid' => $request->user()->uuid,
-            'ref' => Booking::randomId(),
+            'ref' => Booking::randomId('ref'),
             'type' => 'hotel',
             'date_departure' => $request->date_checkin,
             'date_return' => $request->date_checkout,
@@ -84,10 +86,13 @@ class HotelController extends Controller
             'price' => $hotel->calculatePrice(['adult' => $request->nb_adult, 'child' => $request->nb_child, 'baby' => $request->nb_baby], $request->formule),
         ]);
 
-        $booking->bookingHotel()->create([
+        $bookingHotel = $booking->bookingHotel()->create([
             'formule' => $request->formule,
             'type_chambre' => 'Pas de préférence',
         ]);
+
+        event(New NewBooking($request->user(), $booking)); //send notif to Admin
+        // event(New BookingHotel($request->user(), $booking, $bookingHotel));
 
         return redirect(route('booking.show', ['ref' => $booking->ref]))
             ->with('status', 'Votre réservation à été effectuer avec succés!');

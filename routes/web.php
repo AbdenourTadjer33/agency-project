@@ -4,6 +4,7 @@ use App\Models\Trip;
 use App\Models\User;
 use App\Models\Hotel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -11,31 +12,39 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketingController;
 use App\Http\Controllers\Admin\TripController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\AgencyController;
+
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\TripController as ClientTripController;
 use App\Http\Controllers\HotelController as ClientHotelController;
 use App\Http\Controllers\BookingController as ClientBookingController;
 
 Route::get('/', function (Request $request) {
-
     if (Auth::check() && !$request->user()->hasVerifiedEmail()) {
         return redirect(route('verification.notice'));
     }
-
     return view('welcome');
 })->name('welcome');
 
-Route::get('/login-temp', function () {
-    $user = User::first();
-    if (!$user->isAdmin()) {
-        $user->roleToAdmin();
-    }
+Route::get('/login-temp', function (Request $request) {
+    $user = User::where('role', $request->role ?? 'admin')->get()->random();
+    // if (!$user->isAdmin()) {
+    // $user->roleToAdmin();
+    // }
+    session()->regenerate(true);
     Auth::login($user, true);
     return redirect()->intended();
 });
+
+Route::get('/temp-email/tickering', function () {
+    return view('email.ticketing-booking-email', [
+        'user' => User::first(),
+    ]);
+});
+
 
 Route::get('/trips', [ClientTripController::class, 'index'])->name('trips');
 Route::get('/trip/{slug}', [ClientTripController::class, 'show'])->name('trip.show');
@@ -117,14 +126,25 @@ Route::middleware('auth', 'verified', 'role:admin')->prefix('admin')->group(func
 
     // booking management
     Route::controller(BookingController::class)->group(function () {
-        Route::get('/booking', 'index')->name('admin.bookings');
-        Route::get('/booking/{ref}', 'show')->name('admin.booking.show');
-        Route::post('/booking/{ref}/accept', 'acceptBooking')->name('admin.booking.accept');
-        Route::post('/booking/{ref}/refuse', 'refuseBooking')->name('admin.booking.refuse');
+        Route::get('/bookings-trip', 'trips')->name('admin.bookings.trip');
+        Route::get('/bookings-hotel', 'hotels')->name('admin.bookings.hotel');
+        Route::get('/bookings-ticketng', 'ticketings')->name('admin.bookings.ticketing');
+        Route::get('/bookings/{ref}', 'show')->name('admin.booking.show');
+        Route::post('/bookings/{ref}/accept', 'acceptBooking')->name('admin.booking.accept');
+        Route::post('/bookings/{ref}/refuse', 'refuseBooking')->name('admin.booking.refuse');
+
+        Route::delete('/bookings/archive', 'archiveBookings')->name('admin.bookings.delete');
+        Route::delete('/bookings/{ref}', 'archive')->name('admin.booking.delete');
     });
 
+    // InboxController
     Route::controller(InboxController::class)->group(function () {
         Route::get('/inbox', 'index')->name('admin.inboxs');
+    });
+
+    // UsersController
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/users', 'index')->name('admin.users');
     });
 });
 

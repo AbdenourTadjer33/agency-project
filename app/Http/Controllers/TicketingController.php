@@ -83,7 +83,7 @@ class TicketingController extends Controller
         ]);
 
 
-        event(New NewBooking($request->user, $booking)); //send notif to Admin
+        event(New NewBooking($request->user(), $booking)); //send notif to Admin
         event(New BookingTicketing($request->user(), $booking, $bookingTicketing)); // send email to user that contains booking informations
 
         return redirect(route('booking.show', ['ref' => $booking->ref]))->with('status', 'Votre demande de billet à été effectuer avec succés.');

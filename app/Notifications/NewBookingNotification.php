@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Notifications\Notification;
 
-class NewBookingNotification extends Notification implements ShouldQueue
+class NewBookingNotification extends Notification
 {
     use Queueable;
     public $user;
@@ -44,7 +44,9 @@ class NewBookingNotification extends Notification implements ShouldQueue
             'user_uuid' => $this->booking->user_uuid,
             'ref' => $this->booking->ref,
             'type' => $this->booking->type,
-            'booked_at' => $this->booking->created_at
-        ]; 
+            'booked_at' => $this->booking->created_at,
+            'first_name' => $this->user->first_name,
+            'last_name' => $this->user->last_name,
+        ];
     }
 }

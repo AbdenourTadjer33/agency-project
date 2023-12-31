@@ -16,7 +16,7 @@ class AgencyCoordinate extends Model
         'coordinates',
         'address',
         'city',
-        'zip'
+        'country'
     ]; 
 
     public function agency () : BelongsTo {

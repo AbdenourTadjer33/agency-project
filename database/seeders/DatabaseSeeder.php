@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,35 +13,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(100)->create();
+        // \App\Models\User::factory(100)->create();
         // \App\Models\Hotel::factory(100)->create();
-        // $agence = \App\Models\Agency::find(1);
-        // $agence->coordinates()->create([
-        //     'name' => 'Siége Social',
-        //     'coordinates' => json_encode([
-        //         'phone' => '+213 770638523',
-        //         'email' => 'contact@best-tour.dz'
-        //     ]),
-        //     'address' => '67 rue mohemed cheraga',
-        //     'city' => 'Alger,' . ' Algérie',
-        //     'zip' => '16002'
-        // ]);
-
-        // $agence->coordinates()->create([
-        //     'name' => 'Agence Oran',
-        //     'coordinates' => json_encode([
-        //         'phone' => '+213 770638753',
-        //         'email' => 'commercial-oran@best-tour.dz'
-        //     ]),
-        //     'address' => '02 rue ltam bark',
-        //     'city' => 'les Andalous,' . ' Oran',
-        //     'zip' => '31089'
-        // ]);
-
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // case of ticketing book
+        $bookings = \App\Models\Booking::factory(200)->create();
+        foreach ($bookings as $booking) {
+            DB::table('booking_ticketings')->insert([
+                'booking_id' => $booking->id,
+                'flight_type' => 'AR',
+                'airport_departure' => fake()->city(),
+                'airport_arrived' => fake()->city(),
+                'compagnie' => 'air algérie',
+                'class' => "Pas de préférence",
+            ]);
+        }
     }
 }

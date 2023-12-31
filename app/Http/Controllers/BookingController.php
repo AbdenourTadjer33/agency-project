@@ -28,7 +28,10 @@ class BookingController extends Controller
 
     public function delete(Request $request, $ref)
     {
-        $delete = Booking::where('ref', $ref)->firstOrFail()->delete();
-        return $delete;
+        $booking = Booking::where('ref', $ref)->firstOrFail();
+        if (!$booking->delete()) {
+            return redirect()->back()->with('error', 'Réservation n° ' . $booking->ref  . ' n\' pas pu étre suprimmer');
+        }
+        return redirect()->back()->with('status', 'Réservation suprimmer avec ' . $booking->ref . ' succés');
     }
 }

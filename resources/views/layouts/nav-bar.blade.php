@@ -9,11 +9,11 @@
             {{ __('Accueil') }}
         </x-link>
 
-        <x-link :href="route('trips')" :active="request()->routeIs('trips')">
-            {{ __('Voyages') }}
+        <x-link :href="route('trips')" :active="request()->routeIs('trips') || request()->routeIs('trip.show')">
+            {{ __('Voyages Organisé') }}
         </x-link>
 
-        <x-link :href="route('hotels')" :active="request()->routeIs('hotels')">
+        <x-link :href="route('hotels')" :active="request()->routeIs('hotels') || request()->routeIs('hotel.show')">
             {{ __('Hotels') }}
         </x-link>
 

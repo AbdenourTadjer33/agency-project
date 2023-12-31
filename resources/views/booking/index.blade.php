@@ -19,6 +19,13 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="p-4 mt-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-green-400"
+                role="alert">
+                <span class="font-medium">{{ session('error') }}</span>
+            </div>
+        @endif
+
         @if ($bookings->count())
             <h3
                 class="mb-10 text-center uppercase text-3xl font-extrabold dark:text-white md:text-5xl lg:text-6xl text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">

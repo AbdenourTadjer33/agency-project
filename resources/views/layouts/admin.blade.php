@@ -33,7 +33,90 @@
                 </div>
 
                 <div class="flex items-center">
-                    <div class="flex items-center ms-3">
+                    <div class="flex items-center">
+                        <div class="flex justify-center items-center me-5">
+
+                            <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification"
+                                class="relative inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400"
+                                type="button">
+                                <svg class="w-7 h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 14 20">
+                                    <path
+                                        d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z" />
+                                </svg>
+                                @empty(Auth::user()->unReadNotifications)
+                                    <div style="left: 1rem; top: 0rem;"
+                                        class="absolute block w-3 h-3 bg-red-500 border-2 border-white rounded-full dark:border-gray-900">
+                                    </div>
+                                @endempty
+                            </button>
+                        </div>
+
+                        <!-- Dropdown notification -->
+                        <div id="dropdownNotification" data-dropdown-offset-skidding="-100"
+                            class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700"
+                            aria-labelledby="dropdownNotificationButton">
+                            <div
+                                class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white">
+                                Notifications
+                            </div>
+                            <div class="divide-y divide-gray-100 dark:divide-gray-700 max-h-96 overflow-y-auto">
+                                @forelse ($notifications as $notification)
+                                    <a href="{{ route('admin.booking.show', ['ref' => $notification->data['ref']]) }}"
+                                        class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <div class="flex-shrink-0">
+                                            <div
+                                                class="text-sm relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 border">
+                                                <span class="font-medium text-gray-600 dark:text-gray-300">
+                                                    {{ strtoupper(substr($notification->data['first_name'], 0, 1) . substr($notification->data['last_name'], 0, 1)) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="w-full ps-3">
+                                            <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
+                                                Réservation de
+                                                <span class="font-semibold text-gray-900 dark:text-white">
+                                                    {{ $notification->data['first_name'] . ' ' . $notification->data['last_name'] }}
+                                                </span>
+                                                pour
+                                                {{ $notification->data['type'] === 'ticketing' ? 'un billet d\'avion.' : '' }}
+                                                {{ $notification->data['type'] === 'trip' ? 'un voyage organisé.' : '' }}
+                                                {{ $notification->data['type'] === 'hotel' ? 'l\'hôtel.' : '' }}
+                                            </div>
+                                            <div class="text-xs text-blue-600 dark:text-blue-500">
+                                                @php
+                                                    $carbon = new \Carbon\Carbon(new DateTime($notification->data['booked_at']));
+                                                @endphp
+                                                {{ $carbon->diffForHumans() }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div
+                                        class="flex flex-col items-center justify-center px-4 py-2 font-medium text-gray-700 bg-white dark:bg-gray-800 dark:text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-700 h-16 w-16"
+                                            fill="currentColor" viewBox="0 0 256 256">
+                                            <path
+                                                d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z">
+                                            </path>
+                                        </svg>
+                                        Vous n'avez aucune notification
+                                    </div>
+                                @endforelse
+                            </div>
+                            <a href="#"
+                                class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
+                                <div class="inline-flex items-center ">
+                                    <svg class="w-4 h-4 me-2 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
+                                        <path
+                                            d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+                                    </svg>
+                                    Marque comme lu
+                                </div>
+                            </a>
+                        </div>
+
                         <div>
                             <button type="button"
                                 class="text-sm  focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600 relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 border"
@@ -44,6 +127,8 @@
                                 </span>
                             </button>
                         </div>
+
+                        {{-- DROPDOWN user menu --}}
                         <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
                             id="dropdown-user">
                             <div class="px-4 py-3" role="none">
@@ -116,11 +201,17 @@
                     $routeIsAdminHotelEdit = request()->routeIs('admin.hotel.edit');
 
                     // bookings
-                    $routeIsAdminBookings = request()->routeIs('admin.bookings');
+                    $routeIsAdminBookingsTrip = request()->routeIs('admin.bookings.trip');
+                    $routeIsAdminBookingsHotel = request()->routeIs('admin.bookings.hotel');
+                    $routeIsAdminBookingsTicketing = request()->routeIs('admin.bookings.ticketing');
                     $routeIsAdminBookingShow = request()->routeIs('admin.booking.show');
+                    $routeBookings = $routeIsAdminBookingsTrip || $routeIsAdminBookingsHotel ||$routeIsAdminBookingsTicketing || $routeIsAdminBookingShow;
 
                     // inbox
                     $routeIsAdminInboxs = request()->routeIs('admin.inboxs');
+
+                    // users
+                    $routeIsAdminUsers = request()->routeIs('admin.users');
                 @endphp
 
                 {{-- dashboard --}}
@@ -224,18 +315,44 @@
 
                 {{-- Booking --}}
                 <li>
-                    <a href="{{ route('admin.bookings') }}"
-                        class="{{ $routeIsAdminBookings || $routeIsAdminBookingShow ? $selectedButton : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                            fill="currentColor" xmlns="http://www.w3.org/2000/svg"
-                            shape-rendering="geometricPrecision" text-rendering="geometricPrecision"
-                            image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd"
-                            viewBox="0 0 512 282.9">
+                    <button type="button"
+                        class="{{ $routeBookings ? $selectedButton : '' }} flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                        <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            viewBox="0 0 18 21">
                             <path
-                                d="M25.92 0l460.16.01c7.12-.03 13.61 2.89 18.31 7.58 4.69 4.69 7.61 11.18 7.61 18.3v231.1c0 7.13-2.92 13.61-7.61 18.3-4.7 4.69-11.19 7.61-18.3 7.61l-460.17-.02c-7.08.03-13.57-2.89-18.27-7.59l-.05-.05C2.93 270.55 0 264.08 0 256.99v-52.35c0-3.61 2.72-6.59 6.22-7.01 12.23-2.64 22.95-9.42 30.58-18.77 7.6-9.33 12.17-21.26 12.17-34.27 0-13.01-4.57-24.95-12.17-34.27-7.75-9.5-18.68-16.35-31.15-18.89a7.029 7.029 0 01-5.62-6.89L0 25.91C0 18.78 2.92 12.29 7.61 7.6 12.31 2.9 18.8-.02 25.92 0zm376.31 266.93c0 .67.06 1.29.19 1.88l-281.98-.02V14.08h281.98c-.13.59-.19 1.21-.19 1.88v15.69c0 10.33 15.69 10.33 15.69 0V15.96c0-.67-.06-1.3-.19-1.88h68.35c3.23.02 6.19 1.36 8.33 3.49 2.13 2.14 3.47 5.1 3.47 8.32v231.1c0 3.23-1.34 6.18-3.47 8.31-2.15 2.15-5.1 3.48-8.32 3.51h-68.36c.13-.59.19-1.21.19-1.88v-15.68c0-10.33-15.69-10.33-15.69 0v15.68zm0-47.05c0 10.33 15.69 10.33 15.69 0v-15.69c0-10.33-15.69-10.33-15.69 0v15.69zm0-47.06c0 10.33 15.69 10.33 15.69 0v-15.69c0-10.33-15.69-10.33-15.69 0v15.69zm0-47.06c0 10.33 15.69 10.33 15.69 0v-15.68c0-10.33-15.69-10.33-15.69 0v15.68zm0-47.06c0 10.33 15.69 10.33 15.69 0V63.02c0-10.33-15.69-10.33-15.69 0V78.7zM200.58 196.28c0-4.99 2.84-9.86 7.45-15.32l-26.69-16.88c-1.68-.73-1.65-1.77-.67-2.97l5.66-4.81c1.04-.64 2.12-.91 3.29-.59l32.94 5.57L250 131.56l-64.07-43.35c-1.61-.96-1.75-2.04-.09-3.28l9.24-7.38 83.54 23.48 24.68-26.39c8.28-7.16 16.33-10.37 22.5-8.85 3.4.84 4.61 1.85 5.65 5.05 2.03 6.26-1.12 14.67-8.61 23.33l-26.39 24.69 23.48 83.53-7.38 9.25c-1.25 1.66-2.33 1.52-3.28-.1l-43.36-64.06-29.72 27.44 5.58 32.93c.31 1.17.05 2.26-.59 3.29l-4.82 5.66c-1.2.98-2.24 1.01-2.97-.66l-16.88-26.7c-5.48 4.63-10.36 7.47-15.37 7.46-.47-.01-.56-.17-.56-.62z" />
+                                d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z" />
                         </svg>
-                        <span class="flex-1 ms-3 whitespace-nowrap">Réservation</span>
-                    </a>
+                        <span class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">
+                            Réservation
+                        </span>
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <ul id="dropdown-example" class="{{ $routeBookings ? '' : 'hidden'  }} py-2 space-y-2">
+                        <li>
+                            <a href="{{ route('admin.bookings.trip') }}"
+                                class="{{ $routeIsAdminBookingsTrip ? 'bg-gray-100' : '' }} flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                Voyage organisé
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.bookings.hotel') }}"
+                                class="{{ $routeIsAdminBookingsHotel ? 'bg-gray-100' : '' }} flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                Hôtel
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.bookings.ticketing') }}"
+                                class="{{ $routeIsAdminBookingsTicketing ? 'bg-gray-100' : '' }} flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                Billeterie
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 {{-- Inbox --}}
@@ -256,8 +373,8 @@
 
                 {{-- users --}}
                 <li>
-                    <a href="#"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a href="{{ route('admin.users') }}"
+                        class="{{ $routeIsAdminUsers ? $selectedButton : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 20 18">
@@ -293,6 +410,30 @@
     @isset($script)
         <script src="{{ $script }}"></script>
     @endisset
+
+    <script>
+        window.onload = () => {
+
+            const $btnNotifTrigger = document.querySelector('#dropdownNotificationButton');
+            const $dropdownNotif = document.querySelector('#dropdownNotification');
+
+            const options = {
+                placement: 'bottom',
+                triggerType: 'click',
+                offsetSkidding: 100,
+                offsetDistance: 35,
+                delay: 300,
+                ignoreClickOutsideClass: false,
+            };
+
+            const instanceOptions = {
+                id: 'dropdownMenu',
+                override: true
+            };
+
+            const dropdown = new Dropdown($dropdownNotif, $btnNotifTrigger, options, instanceOptions);
+        }
+    </script>
 
 </body>
 

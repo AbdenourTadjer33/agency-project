@@ -15,11 +15,6 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasUuids;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'first_name',
         'last_name',
@@ -32,55 +27,55 @@ class User extends Authenticatable implements MustVerifyEmail
         'passport_id'
     ];
 
+    public $incrementing = false;
+    protected $primaryKey = 'uuid';
 
-    public function verificationCodes() : HasMany {
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    public function verificationCodes(): HasMany
+    {
         return $this->hasMany(VerificationCode::class);
     }
 
-    public function bookings() : HasMany 
+    public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
     }
 
-
-    public $incrementing = false;
-    protected $primaryKey = 'uuid';
+    public function archives(): HasMany 
+    {
+        return $this->hasMany(Archive::class, 'user_uuid', 'uuid');
+    }
+ 
 
     public function hasRole($role)
     {
         return $this->role === $role;
     }
 
-    public function isAdmin() {
+    public function isAdmin()
+    {
         return $this->role === 'admin';
     }
 
-    public function isClient() {
+    public function isClient()
+    {
         return $this->role === 'client';
     }
 
-    public function roleToAdmin() {
+    public function roleToAdmin()
+    {
         $this->role = 'admin';
         $this->save();
     }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
 }

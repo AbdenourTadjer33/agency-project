@@ -20,13 +20,14 @@ class HotelFactory extends Factory
             'name' => fake()->company(),
             'slug' => fake()->slug(2),
             'description' => fake()->sentence(10),
+            'country' => fake()->country(),
+            'city' => fake()->city(),
+            'address' => fake()->address(),
             'coordinates' => json_encode(['phone' => "0500000000", 'email' => fake()->unique()->safeEmail()]),
             'classification' => rand(1, 5),
             'number_rooms' => rand(20, 100),
             'services' => json_encode([]),
-            'country' => fake()->country(),
-            'city' => fake()->city(),
-            'address' => fake()->address(),
+            'assets' => json_encode([]),
         ];
     }
 }

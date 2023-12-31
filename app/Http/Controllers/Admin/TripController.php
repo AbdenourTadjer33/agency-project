@@ -15,11 +15,19 @@ use Illuminate\Support\Facades\Validator;
 
 class TripController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.trip.index', [
-            'trips' => Trip::all()
-        ]);
+        $trips = new Trip;
+        $categories = TripCategorie::select('id', 'name')->get()->toArray();
+
+        dd($trips, $categories);
+        if ($request->category && $request->category != 'all' && in_array($request->category, $categories)) {
+            $trips->where('trip_category_id', $request->category);
+        }
+
+            return view('admin.trip.index', [
+                'trips' => $trips->paginate($request->pagination > 15 || $request->pagination == null ? 6 : $request->pagination)
+            ]);
     }
 
     public function show($id)

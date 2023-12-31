@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Traits\RandomId;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Booking extends Model
 {
@@ -27,7 +28,7 @@ class Booking extends Model
         'observation',
         'is_payed',
         'is_online',
-        'price'
+        'price',
     ];
 
     public function user(): BelongsTo
@@ -54,8 +55,12 @@ class Booking extends Model
     {
         return $this->morphTo();
     }
-    
+
     protected $casts = [
         'beneficiaries' => 'array',
+        'date_departure' => 'date',
+        'date_return' => 'date'
     ];
+
+    const ALLSTATUS = ['non-accepté', 'accepté', 'annulé', 'non-validé', 'validé'];
 }

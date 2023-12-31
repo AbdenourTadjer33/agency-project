@@ -1,11 +1,5 @@
 <x-admin-layout>
     <x-slot:title>Gestion d'hôtel</x-slot:title>
-    @if (session('status'))
-        <div class="p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-            role="alert">
-            <span class="font-medium">{{ session('status') }}</span>
-        </div>
-    @endif
     <div>
         {{-- filter --}}
         <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
@@ -31,9 +25,16 @@
                 <button
                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                     Créer un nouveau hôtel
-                 </button>
+                </button>
             </a>
         </div>
+
+        @if (session('status'))
+            <div class="p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                role="alert">
+                <span class="font-medium">{{ session('status') }}</span>
+            </div>
+        @endif
 
         {{-- table --}}
         <div class="mt-4 relative overflow-x-auto shadow-md sm:rounded-lg">

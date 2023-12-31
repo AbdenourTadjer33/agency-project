@@ -14,23 +14,14 @@ class BookingHotel
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
-    public function __construct()
-    {
-        //
-    }
+    public $user;
+    public $booking;
+    public $bookingHotel;
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
+    public function __construct($user, $booking, $bookingHotel)
     {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
+        $this->user = $user;
+        $this->booking = $booking;
+        $this->bookingHotel = $bookingHotel;
     }
 }

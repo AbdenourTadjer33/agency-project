@@ -3,14 +3,18 @@
 
     {{-- status --}}
     @if (session('status'))
-    <div class="mx-20 p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-        role="alert">
-        <span class="font-medium">{{ session('status') }}</span>
-    </div>
+        <div class="mx-20 p-4 mt-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            role="alert">
+            <span class="font-medium">{{ session('status') }}</span>
+        </div>
     @endif
 
     @php
         $formule = ['LPD' => 'Petit déjuner', 'LDP' => 'Demi pension', 'LPC' => 'Pension compléte'];
+        $beneficiaries = $booking->beneficiaries;
+        if (!is_array($beneficiaries)) {
+            $beneficiaries = json_decode($booking->beneficiaries, true);
+        }
     @endphp
 
     {{-- billeterie commande --}}
@@ -112,8 +116,7 @@
                             </h5>
                         </div>
                         <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-
-                        @foreach ($booking->beneficiaries['adult'] as $adult)
+                        @foreach ($beneficiaries['adult'] as $adult)
                             <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
                                     Prénom adulte : <span class="font-bold">{{ $adult['fname'] }}</span>
@@ -133,9 +136,9 @@
                             </div>
                         @endforeach
 
-                        @if ($booking->beneficiaries['child'])
+                        @if ($beneficiaries['child'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($booking->beneficiaries['child'] as $child)
+                            @foreach ($beneficiaries['child'] as $child)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
                                         Prénom Enfant : <span class="font-bold">{{ $child['fname'] }}</span>
@@ -155,9 +158,9 @@
                                 </div>
                             @endforeach
                         @endif
-                        @if ($booking->beneficiaries['baby'])
+                        @if ($beneficiaries['baby'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($booking->beneficiaries['baby'] as $baby)
+                            @foreach ($beneficiaries['baby'] as $baby)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
                                         Prénom Bébe : <span class="font-bold">{{ $baby['fname'] }}</span>
@@ -296,7 +299,7 @@
                         </div>
                         <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
 
-                        @foreach ($booking->beneficiaries['adult'] as $adult)
+                        @foreach ($beneficiaries['adult'] as $adult)
                             <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
                                     Prénom adulte : <span class="font-bold">{{ $adult['fname'] }}</span>
@@ -315,9 +318,9 @@
                                 </h5>
                             </div>
                         @endforeach
-                        @if ($booking->beneficiaries['child'])
+                        @if ($beneficiaries['child'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($booking->beneficiaries['child'] as $child)
+                            @foreach ($beneficiaries['child'] as $child)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
                                         Prénom Enfant : <span class="font-bold">{{ $child['fname'] }}</span>
@@ -337,9 +340,9 @@
                                 </div>
                             @endforeach
                         @endif
-                        @if ($booking->beneficiaries['baby'])
+                        @if ($beneficiaries['baby'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($booking->beneficiaries['baby'] as $baby)
+                            @foreach ($beneficiaries['baby'] as $baby)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
                                         Prénom Bébe : <span class="font-bold">{{ $baby['fname'] }}</span>
@@ -396,7 +399,7 @@
                 </div>
             </div>
 
-            
+
             <div class="grid gap-4 mb-4 sm:grid-cols-3">
                 <h5 class="text-center text-lg tracking-tight text-gray-900 dark:text-white">
                     hôtel :
@@ -470,7 +473,7 @@
                         </div>
                         <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
 
-                        @foreach ($booking->beneficiaries['adult'] as $adult)
+                        @foreach ($beneficiaries['adult'] as $adult)
                             <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                 <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
                                     Prénom adulte : <span class="font-bold">{{ $adult['fname'] }}</span>
@@ -489,9 +492,9 @@
                                 </h5>
                             </div>
                         @endforeach
-                        @if ($booking->beneficiaries['child'])
+                        @if ($beneficiaries['child'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($booking->beneficiaries['child'] as $child)
+                            @foreach ($beneficiaries['child'] as $child)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
                                         Prénom Enfant : <span class="font-bold">{{ $child['fname'] }}</span>
@@ -511,9 +514,9 @@
                                 </div>
                             @endforeach
                         @endif
-                        @if ($booking->beneficiaries['baby'])
+                        @if ($beneficiaries['baby'])
                             <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-700">
-                            @foreach ($booking->beneficiaries['baby'] as $baby)
+                            @foreach ($beneficiaries['baby'] as $baby)
                                 <div class="grid gap-4 mb-4 sm:grid-cols-4">
                                     <h5 class="text-base tracking-tight text-gray-900 dark:text-white">
                                         Prénom Bébe : <span class="font-bold">{{ $baby['fname'] }}</span>

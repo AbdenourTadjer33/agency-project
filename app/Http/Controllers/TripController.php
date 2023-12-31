@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BookingTrip;
 use App\Models\Trip;
 use App\Models\Booking;
-use App\Traits\HttpResponses;
+use App\Events\NewBooking;
 use Illuminate\Http\Request;
+use App\Traits\HttpResponses;
 use Illuminate\Validation\Rule;
 
 class TripController extends Controller
@@ -65,7 +67,7 @@ class TripController extends Controller
 
         $booking = $trip->booking()->create([
             'user_uuid' => $request->user()->uuid,
-            'ref' => Booking::randomId(),
+            'ref' => Booking::randomId('ref'),
             'type' => 'trip',
             'date_departure' => $trip->tripDates->where('id', $request->date_id)->first()->date_departure,
             'date_return' => $trip->tripDates->where('id', $request->date_id)->first()->date_return,
@@ -81,11 +83,14 @@ class TripController extends Controller
             'price' => $trip->calculatePrice(['adult' => $request->nb_adult, 'child' => $request->nb_child, 'baby' => $request->nb_baby]),
         ]);
 
-        $booking->bookingTrip()->create([
+        $bookingTrip = $booking->bookingTrip()->create([
             'formule' => $request->formule,
         ]);
 
-        return redirect(route('bookings'))->with('status', 'Votre réservation à été effectuer avec succés!');
+        event(New NewBooking($request->user(), $booking)); //send notif to Admin
+        // event(new BookingTrip($request->user(), $booking, $bookingTrip));
+
+        return redirect(route('booking.show', ['ref' => $booking->ref]))->with('status', 'Votre réservation à été effectuer avec succés!');
     }
 
     public function calculateTripPrice(Request $request) {
