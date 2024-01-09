@@ -75,4 +75,16 @@ class Trip extends Model
         ];
         return $tab[$formuleBase];
     }
+
+    public function isExpired() {
+        $isValid = true;
+        $index = 0;
+        while ($isValid && $index < count($this->tripDates)) {
+            if ($this->tripDates[$index]->date_departure->isFuture() || $this->tripDates[$index]->date_return->isFuture()) {
+                $isValid = false;
+            }
+            $index++;
+        }
+        return $isValid;
+    }
 }

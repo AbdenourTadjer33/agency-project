@@ -18,10 +18,32 @@ class BookingFactory extends Factory
      */
     public function definition(): array
     {
+        // return [
+        //     'user_uuid' => User::where('role', 'client')->get()->random()->uuid,
+        //     'ref' => Booking::randomId(),
+        //     'type' => 'ticketing',
+        //     'date_departure' =>  date_format(fake()->dateTimeBetween('-3 year', '+1 year'), 'Y-m-d'),
+        //     'date_return' =>  date_format(fake()->dateTimeBetween('now', '+1 year'), 'Y-m-d'),
+        //     'status' => null,
+        //     'number_adult' => 1,
+        //     'number_child' => 0,
+        //     'number_baby' => 0,
+        //     'beneficiaries' => json_encode([
+        //         'adult' => [['fname' => fake()->firstName(), 'lname' => fake()->lastName(), 'dob' => fake()->date(), 'passport_id' =>  rand(1000000000, 9999999999)]],
+        //         'child' => null,
+        //         'baby' => null,
+        //     ]),
+        //     'status' => rand(0,1) ? 'non-validé' : 'validé' ,
+        //     'observation' => fake()->sentence(),
+        //     'is_payed' => false,
+        //     'is_online' => 1,
+        //     'price' => null,
+        // ];
+
         return [
             'user_uuid' => User::where('role', 'client')->get()->random()->uuid,
             'ref' => Booking::randomId(),
-            'type' => 'ticketing',
+            'type' => 'trip',
             'date_departure' =>  date_format(fake()->dateTimeBetween('-3 year', '+1 year'), 'Y-m-d'),
             'date_return' =>  date_format(fake()->dateTimeBetween('now', '+1 year'), 'Y-m-d'),
             'status' => null,

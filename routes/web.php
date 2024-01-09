@@ -1,50 +1,27 @@
 <?php
 
 use App\Models\Trip;
-use App\Models\User;
-use App\Models\Hotel;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\TicketingController;
 use App\Http\Controllers\Admin\TripController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\AgencyController;
-
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\TripController as ClientTripController;
 use App\Http\Controllers\HotelController as ClientHotelController;
 use App\Http\Controllers\BookingController as ClientBookingController;
 
-Route::get('/', function (Request $request) {
-    if (Auth::check() && !$request->user()->hasVerifiedEmail()) {
-        return redirect(route('verification.notice'));
-    }
-    return view('welcome');
-})->name('welcome');
+Route::get('/test', [BookingController::class, 'archiveBookings']);
 
-Route::get('/login-temp', function (Request $request) {
-    $user = User::where('role', $request->role ?? 'admin')->get()->random();
-    // if (!$user->isAdmin()) {
-    // $user->roleToAdmin();
-    // }
-    session()->regenerate(true);
-    Auth::login($user, true);
-    return redirect()->intended();
-});
-
-Route::get('/temp-email/tickering', function () {
-    return view('email.ticketing-booking-email', [
-        'user' => User::first(),
-    ]);
-});
-
+Route::get('/', [WelcomeController::class, '__invoke'])->name('welcome');
+Route::get('/faq', [FaqController::class, 'index'])->name('faq');
+Route::post('/faq', [FaqController::class, 'store'])->name('faq.store');
 
 Route::get('/trips', [ClientTripController::class, 'index'])->name('trips');
 Route::get('/trip/{slug}', [ClientTripController::class, 'show'])->name('trip.show');
@@ -59,7 +36,7 @@ Route::post('/ticketing', [TicketingController::class, 'store'])->name('ticketin
 
 Route::get('/my-bookings', [ClientBookingController::class, 'index'])->name('bookings');
 Route::get('/my-bookings/{ref}', [ClientBookingController::class, 'show'])->name('booking.show');
-Route::delete('/my-bookings/delete/{ref}', [ClientBookingController::class, 'delete'])->name('booking.delete');
+Route::delete('/my-bookings/delete/{ref}', [ClientBookingController::class, 'cancel'])->name('booking.delete');
 
 
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
@@ -109,8 +86,11 @@ Route::middleware('auth', 'verified', 'role:admin')->prefix('admin')->group(func
     Route::controller(TripController::class)->group(function () {
         Route::get('/trips', 'index')->name('admin.trips');
         Route::get('/trips/create', 'create')->name('admin.trip.create');
-        Route::post('/trips/create', 'store')->name('admin.trip.store');
         Route::get('/trips/{id}', 'show')->name('admin.trip.show');
+        Route::post('/trips/create', 'store')->name('admin.trip.store');
+        Route::get('/trips/edit/{id}', 'edit')->name('admin.trip.edit');
+        Route::post('/trips/edit/{id}', 'update')->name('admin.trip.update');
+        Route::delete('/trips', 'archiveExpiredTrips')->name('admin.trips.archive');
     });
 
     // hotel management
@@ -132,10 +112,9 @@ Route::middleware('auth', 'verified', 'role:admin')->prefix('admin')->group(func
         Route::get('/bookings/{ref}', 'show')->name('admin.booking.show');
         Route::post('/bookings/{ref}/accept', 'acceptBooking')->name('admin.booking.accept');
         Route::post('/bookings/{ref}/refuse', 'refuseBooking')->name('admin.booking.refuse');
-
-        Route::delete('/bookings/archive', 'archiveBookings')->name('admin.bookings.delete');
         Route::delete('/bookings/{ref}', 'archive')->name('admin.booking.delete');
     });
+
 
     // InboxController
     Route::controller(InboxController::class)->group(function () {

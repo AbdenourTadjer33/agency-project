@@ -12,6 +12,8 @@ class Archive extends Model
 
     protected $fillable = [
         'user_uuid',
+        'archive_type',
+        'archive_types',
         'data',
     ];
 
@@ -21,6 +23,6 @@ class Archive extends Model
     }
 
     protected $casts = [
-        'data' => 'object',
+        'data' => 'array',
     ];
 }

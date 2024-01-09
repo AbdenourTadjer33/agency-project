@@ -11,16 +11,16 @@ use Illuminate\Support\Str;
 
 class HotelController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.hotel.manage-hotels', [
-            'hotels' => Hotel::all(),
+        return view('admin.hotel.index', [
+            'hotels' => Hotel::where('slug', '<>', null)->with(['pricing'])->paginate($request->pagination > 15 || $request->pagination == null ? 6 : $request->pagination),
         ]);
     }
 
     public function create()
     {
-        return view('admin.hotel.create-hotel');
+        return view('admin.hotel.create');
     }
 
     public function store(Request $request)
@@ -40,7 +40,6 @@ class HotelController extends Controller
             'coordinates.website' => ['nullable', 'url'],
             'coordinates.facebook' => ['nullable', 'url'],
             'coordinates.instagram' => ['nullable', 'url'],
-            'coordinates.booking' => ['nullable', 'url'],
             'classification' => ['required', 'integer'],
             'services' => ['required', 'array'],
             'assets' => ['required', 'array', 'min:1', 'max:10'],
@@ -53,11 +52,18 @@ class HotelController extends Controller
             'price_f3' => ['required'],
         ]);
 
+     
         $assets = $request->file('assets');
-
-        $paths = [];
-        for ($i = 0; $i < sizeof($assets); $i++) {
-            $paths[] = $assets[$i]->store('public/hotels');
+        $imgs = [];
+        $counter = 1;
+        foreach ($assets as $asset) {
+            $imgOriginaleName = $asset->getClientOriginalName();
+            $imgs[] = [
+                'id' => $counter++,
+                'path' => $asset->store('hotels', 'public'),
+                'originalName' => $imgOriginaleName,
+                'description' => $request->input(preg_replace('/[^a-zA-Z0-9]/', '', $imgOriginaleName)),
+            ];
         }
 
         $hotel = Hotel::create([
@@ -71,7 +77,7 @@ class HotelController extends Controller
             'classification' => $request->classification,
             'number_rooms' => $request->nb_rooms,
             'services' => json_encode($request->services),
-            'assets' => json_encode($paths),
+            'assets' => json_encode($imgs),
         ]);
 
         $hotel->pricing()->create([
@@ -88,15 +94,15 @@ class HotelController extends Controller
 
     public function show($id)
     {
-        return view('admin.hotel.manage-hotels', [
-            'hotels' => Hotel::where('id', $id)->get()
+        return view('admin.hotel.show', [
+            'hotel' => Hotel::where('id', $id)->firstOrFail()
         ]);
     }
 
     public function edit($id)
     {
-        return view('admin.hotel.edit-hotel', [
-            'hotel' => Hotel::findOrFail($id)
+        return view('admin.hotel.edit', [
+            'hotel' => Hotel::with('pricing')->findOrFail($id)
         ]);
     }
 
@@ -151,24 +157,6 @@ class HotelController extends Controller
         ]);
 
         return redirect(route('admin.hotel.show', ['id' => $hotel->id]))->with('status', $hotel->name . 'modifier avec succés');
-    }
-
-    public function editAssets($id)
-    {
-        return view('admin.hotel.edit-hotel-assets', [
-            'hotel' => Hotel::findOrFail($id)
-        ]);
-    }
-
-    public function updateAssets(Request $request, $id)
-    {
-        $hotel = Hotel::findOrFail($id);
-        $request->validate([
-            'assets' => ['required', 'array', 'min:1', 'max:10'],
-            'assets.*' => ['required', 'image', 'mimes:jpg,svg,png,jpeg', 'max:2048']
-        ]);
-
-        // Storage::disk('public')
     }
 
     public function delete($id)

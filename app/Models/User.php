@@ -40,6 +40,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
     ];
 
+    public function faqs(): HasMany
+    {
+        return $this->hasMany(Faq::class);
+    }
+
+    public function replyFaq(): HasMany
+    {
+        return $this->hasMany(FaqResponse::class, 'admin_id', 'uuid');
+    }
+
     public function verificationCodes(): HasMany
     {
         return $this->hasMany(VerificationCode::class);
@@ -50,11 +60,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Booking::class);
     }
 
-    public function archives(): HasMany 
+    public function archives(): HasMany
     {
         return $this->hasMany(Archive::class, 'user_uuid', 'uuid');
     }
- 
+
 
     public function hasRole($role)
     {
@@ -76,6 +86,4 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->role = 'admin';
         $this->save();
     }
-
-
 }

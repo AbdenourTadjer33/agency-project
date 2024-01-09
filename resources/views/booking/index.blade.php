@@ -55,9 +55,7 @@
                             <th scope="col" class="px-2 py-3">
                                 modifier à
                             </th>
-                            <th scope="col" class="px-2 py-3">
-                                action
-                            </th>
+                            <th scope="col" class="px-2 py-3"></th>
                         </tr>
                     </thead>
 
@@ -112,23 +110,15 @@
                                 </td>
                                 {{-- actions --}}
                                 <td class="px-2 py-4">
+                                    <button class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">
+                                        Afficher
+                                    </button>
+
                                     {{-- edit btn --}}
                                     <button
                                         class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-2 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
                                         type="button">
-                                        <a href="#">
-                                            <svg xmlns="http://www.w3.org/2000/svg" version="1.0"
-                                                class="w-4 text-purple-200" fill="currentColor"
-                                                viewBox="0 0 512.000000 512.000000">
-                                                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                                                    stroke="none">
-                                                    <path
-                                                        d="M4168 4811 c-31 -10 -79 -31 -105 -46 -66 -38 -1709 -1678 -1723 -1720 -23 -71 -140 -652 -140 -694 0 -86 64 -151 150 -151 42 0 624 118 695 140 20 7 308 288 867 847 910 912 878 876 913 1025 60 256 -92 521 -343 598 -85 26 -233 27 -314 1z m230 -306 c103 -44 150 -161 102 -259 -11 -23 -62 -84 -115 -136 l-95 -95 -137 138 -138 137 95 95 c52 53 113 104 135 115 48 24 102 26 153 5z m-468 -580 l135 -135 -580 -579 -580 -578 -163 -33 c-89 -18 -165 -30 -169 -27 -3 4 9 80 27 169 l33 163 576 578 c317 317 578 577 581 577 3 0 66 -61 140 -135z" />
-                                                    <path
-                                                        d="M1025 4723 c-261 -36 -502 -222 -604 -466 -65 -157 -62 -77 -59 -1732 3 -1402 4 -1504 21 -1560 22 -74 76 -191 116 -248 73 -107 211 -218 336 -270 145 -60 64 -58 1730 -55 l1520 3 80 28 c254 90 436 278 511 532 17 56 19 137 21 1176 l3 1115 -22 34 c-39 56 -72 75 -136 75 -70 0 -115 -28 -143 -89 -18 -39 -19 -89 -19 -1107 0 -1032 -1 -1069 -20 -1130 -38 -124 -119 -217 -239 -277 l-75 -37 -1490 -3 c-1342 -2 -1495 -1 -1545 14 -154 44 -276 168 -315 319 -14 52 -16 231 -16 1507 0 1034 3 1462 11 1500 32 150 136 269 288 330 l56 23 1112 5 c1103 5 1112 5 1139 26 52 39 69 71 69 133 0 47 -5 64 -27 93 -56 73 28 68 -1185 67 -598 -1 -1101 -4 -1118 -6z" />
-                                                </g>
-                                            </svg>
-                                        </a>
+                                        Editer
                                     </button>
                                     {{-- edit modal --}}
 
@@ -137,12 +127,7 @@
                                         data-modal-toggle="delete-booking-modal-{{ $booking->id }}"
                                         class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-2 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                                         type="button">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 text-red-400"
-                                            fill="currentColor" viewBox="0 0 256 256">
-                                            <path
-                                                d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z">
-                                            </path>
-                                        </svg>
+                                        Annuler
                                     </button>
 
                                     {{-- Delete modal --}}

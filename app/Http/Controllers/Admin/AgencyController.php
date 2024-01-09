@@ -104,6 +104,6 @@ class AgencyController extends Controller
     {
         $agence = AgencyCoordinate::findOrFail($id);
         $agence->delete();
-        return redirect(route('admin.agency'))->with('status', $agence->name . ' est suprimmer avec succés!'); 
+        return redirect(route('admin.agency'))->with('status', $agence->name . ' est suprimmer avec succés!');
     }
 }

@@ -1,12 +1,13 @@
 <x-admin-layout>
     <x-slot:title>Créer un voyage oragnisé</x-slot:title>
     <x-slot:script>{{ asset('storage/js/create-trip.js') }}</x-slot:script>
+
     <div class="mt-2 bg-gradient-to-tr from-purple-100 via-slate-200 to-stone-100 rounded shadow-2xl p-10">
         <form action="{{ route('admin.trip.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="grid gap-4 mb-4 sm:grid-cols-3">
                 {{-- title --}}
-                <h1 class="sm:col-span-3 text-center text-3xl font-bold capitalize text-slate-800 mb-5">
+                <h1 class="sm:col-span-3 text-center text-3xl font-bold capitalize text-slate-900 mb-5">
                     Information sur le voyage organisé
                 </h1>
 
@@ -35,7 +36,7 @@
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         <option>Sélectionnez la catégorie de voyage organisé</option>
                         @foreach ($categories as $category)
-                            <option {{ old('category') === $category->id ? 'selected' : '' }}
+                            <option {{ old('category') == $category->id ? 'selected' : '' }}
                                 value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
@@ -65,55 +66,6 @@
                         <div class="text-red-800 error">{{ $message }}</div>
                     @enderror
                 </div>
-                {{-- formula disponible --}}
-                {{-- <div>
-                    <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover"
-                        class="w-full text-sm font-medium text-gray-900 bg-white hover:bg-gray-50 focus:ring-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg px-5 py-2.5 text-center inline-flex items-center justify-between dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        type="button">Sélectionnez les formules disponible <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 4 4 4-4" />
-                        </svg>
-                    </button>
-
-                    <!-- Dropdown menu -->
-                    <div id="dropdownBgHover" class="z-10 hidden bg-white rounded-lg shadow dark:bg-gray-700">
-                        <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownBgHoverButton">
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="" type="checkbox" value=""
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for=""
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Default
-                                        checkbox</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input checked id="" type="checkbox" value=""
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for=""
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Checked
-                                        state</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="" type="checkbox" value=""
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for=""
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Default
-                                        checkbox</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    @error('formule_base')
-                        <div class="text-red-800 error">{{ $message }}</div>
-                    @enderror
-                </div> --}}
 
                 {{-- description --}}
                 <div class="sm:col-span-3">
@@ -139,7 +91,7 @@
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         <option value="null">Sélectionnez une destination</option>
                         @foreach (Storage::json('public/data/country_info.json') as $country)
-                            <option {{ $country['name'] == old('country') ? 'selected' : '' }}
+                            <option {{ $country['name'] == old('destination') ? 'selected' : '' }}
                                 value="{{ $country['name'] }}">
                                 {{ $country['flag'] . ' ' . $country['name'] }}
                             </option>
@@ -269,7 +221,42 @@
                 <input
                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                     name="assets[]" id="assets" multiple type="file">
-                <div id="target" class="flex justify-center items-center gap-1 mt-3"></div>
+
+                <div id="target" class="hidden relative overflow-x-auto shadow-md sm:rounded-lg my-4">
+                    <table id="my-table"
+                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-16 py-3">
+                                    <span class="sr-only">Image</span>
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Description
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{-- <tr
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <td class="p-4">
+                                    <img src="{{ asset('storage/' . $asset) }}"
+                                        class="w-16 md:w-32 max-w-full max-h-full">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <input type="text" name="description" placeholder="Description de l'image"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="#"
+                                        class="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</a>
+                                </td>
+                            </tr> --}}
+                        </tbody>
+                    </table>
+                </div>
                 <x-input-error :messages="$errors->get('assets')" class="mt-2" />
                 @if ($errors->get('assets.*'))
                     @foreach ($errors->get('assets.*') as $error)
@@ -286,24 +273,32 @@
             <div class="grid gap-4 mb-4 sm:grid-cols-2">
                 {{-- checkbox hotel --}}
                 <div class="flex items-center sm:col-span-2 mb-4">
-                    <input id="on_my_hotels" name="on_my_hotels" type="checkbox"
+                    <input id="on_my_hotels" name="on_my_hotels" type="checkbox" value="1"
                         {{ request()->get('on_my_hotels') == '1' ? 'checked' : '' }}
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     <label for="on_my_hotels" class="ms-2 text-base font-medium text-gray-900 dark:text-gray-300">
-                        hébergement dans l'un de mes hôtel associe.
+                        hébergement dans l'un des hôtels existant.
                     </label>
                 </div>
 
                 {{-- hotel-id --}}
                 <div class="sm:col-span-2 {{ request()->get('on_my_hotels') == '1' ? '' : 'hidden' }}"
                     id="hotel-id">
+                    <label class="block mb-2 text-sm font-medium text-gray-900">
+                        Choississez un hôtel (*)
+                    </label>
                     <select id="hotel-id" name="hotel_id"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         <option>Sélectionnez un hôtel</option>
                         @foreach ($hotels as $hotel)
-                            <option value="{{ $hotel->id }}">{{ $hotel->name }}</option>
+                            <option value="{{ $hotel->id }}" {{ old('hotel_id') == $hotel->id ? 'selected' : '' }}>
+                                {{ $hotel->name . ' - ' . ($hotel->slug ? 'conventionné' : 'non conventionné') }}
+                            </option>
                         @endforeach
                     </select>
+                    @error('hotel_id')
+                        <div class="text-red-800 error">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
 
@@ -343,127 +338,6 @@
                             value="{{ old('classification') }}" x-ref="rating"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                         @error('hotel.classification')
-                            <div class="text-red-800 error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="grid gap-4 mb-4 sm:grid-cols-3">
-                    {{-- country --}}
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-900">
-                            Pays de l'hôtel
-                        </label>
-
-                        <button id="dropdownBgHoverButton" data-dropdown-toggle="dropdownBgHover"
-                            class="w-full text-sm font-medium text-gray-900 bg-white hover:bg-gray-50 focus:ring-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-lg px-5 py-2.5 text-center inline-flex items-center justify-between dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                            type="button">Sélectionnez un payes <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 4 4 4-4" />
-                            </svg>
-                        </button>
-
-                        <!-- Dropdown menu -->
-                        <div id="dropdownBgHover" class="z-10 hidden bg-white rounded-lg shadow dark:bg-gray-700">
-                            <ul class="h-48 py-2 overflow-y-auto p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200 select-none"
-                                aria-labelledby="dropdownBgHoverButton">
-                                @foreach (Storage::json('public/data/country_info.json') as $country)
-                                    <li>
-                                        <div
-                                            class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                            <input type="radio" value="{{ $country['name'] }}" id="{{ $country['name'] }}" name="hotel[country]"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                            <label for="{{ $country['name'] }}"
-                                                class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
-                                                {{ $country['flag'] . '  ' . $country['name'] }}
-                                            </label>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
-                    {{-- <div>
-                        <label for="hotel[country]" class="block mb-2 text-sm font-medium text-gray-900">
-                            Pays de l'hôtel
-                        </label>
-                        <select id="hotel[country]" name="hotel[country]"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                            <option>Sélectionnez un payes</option>
-                            @foreach (Storage::json('public/data/country_info.json') as $country)
-                                <option {{ $country['name'] == old('country') ? 'selected' : '' }}
-                                    value="{{ $country['name'] }}">
-                                    {{ $country['flag'] . ' ' . $country['name'] }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('hotel.country')
-                            <div class="text-red-800 error">{{ $message }}</div>
-                        @enderror
-                    </div> --}}
-
-                    {{-- city --}}
-                    <div>
-                        <label for="hotel[city]" class="block mb-2 text-sm font-medium text-gray-900">
-                            Ville de l'hôtel
-                        </label>
-                        <input type="text" id="hotel[city]" name='hotel[city]' value="{{ old('hotel.city') }}"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        @error('hotel.city')
-                            <div class="text-red-800 error">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- address --}}
-                    <div>
-                        <label for="hotel[address]" class="block mb-2 text-sm font-medium text-gray-900">
-                            Adresse de l'hôtel
-                        </label>
-                        <input type="text" id="hotel[address]" name='hotel[address]'
-                            value="{{ old('hotel.address') }}"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        @error('hotel.address')
-                            <div class="text-red-800 error">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    {{-- services --}}
-                    <div class="mb-5 sm:col-span-3">
-                        <label class="block mb-2 text-sm font-medium text-gray-900">
-                            Service offert par l'hôtel
-                        </label>
-                        <div class="flex flex-wrap mt-1 select-none" id="tagButtons">
-                            @foreach (Storage::json('public/data/hotel_services.json') as $tag)
-                                @if (old('hotel.services') && in_array($tag, old('hotel.services')))
-                                    <span x-data="{ selected: true, value: `{{ $tag }}` }"
-                                        x-on:click="selected = !selected; selected ? addInput(value) : removeInput(value)"
-                                        x-bind:class="selected ?
-                                            'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300' :
-                                            'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300'"
-                                        class="inline-flex items-center cursor-pointer text-xs font-medium m-0.5 px-2.5 py-1 rounded dark:bg-indigo-900 dark:text-indigo-300">
-                                        {{ $tag }}
-                                    </span>
-                                @else
-                                    <span x-data="{ selected: false, value: `{{ $tag }}` }"
-                                        x-on:click="selected = !selected; selected ? addInput(value) : removeInput(value)"
-                                        x-bind:class="selected ?
-                                            'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300' :
-                                            'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300'"
-                                        class="inline-flex items-center cursor-pointer text-xs font-medium m-0.5 px-2.5 py-1 rounded dark:bg-indigo-900 dark:text-indigo-300">
-                                        {{ $tag }}
-                                    </span>
-                                @endif
-                            @endforeach
-                        </div>
-                        <div id="selected-services">
-                            @if (old('hotel.services'))
-                                @foreach (old('hotel.services') as $service)
-                                    <input type="hidden" name="hotel.services[]" value="{{ $service }}">
-                                @endforeach
-                            @endif
-                        </div>
-                        @error('services')
                             <div class="text-red-800 error">{{ $message }}</div>
                         @enderror
                     </div>
@@ -548,5 +422,202 @@
         </div>
     </div>
 
+
+    <script>
+        const assetsInput = document.querySelector("#assets");
+        const containerImgs = document.querySelector("div#target");
+        const bodyTable = containerImgs.querySelector('tbody')
+
+        const MAXFILE = 8;
+        let isAlert = false;
+
+        assetsInput.onchange = (event) => {
+            const assets = assetsInput.files;
+            if (assets.length > MAXFILE) {
+                assetsInput.value = null;
+                isAlert = true;
+                alert("maximum file upload is " + MAXFILE);
+            }
+            bodyTable.innerHTML = "";
+
+            let index = 0;
+            while (!isAlert && index < assets.length) {
+                containerImgs.classList.remove('hidden');
+                const row = createRow(assets[index]);
+                bodyTable.appendChild(row);
+
+                index++; // increment to get the next file.
+            }
+            isAlert = false;
+        };
+
+        function createFileList(array) {
+            const dataTransfer = new DataTransfer();
+
+            array.forEach((file) => {
+                dataTransfer.items.add(file);
+            });
+
+            return dataTransfer.files;
+        }
+
+        const createRow = (file) => {
+            const imgPath = URL.createObjectURL(file);
+            const imgName = file.name
+
+            const row = document.createElement('tr');
+            row.classList =
+                'bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600';
+            row.setAttribute('data-file', file.name)
+
+            // image column
+            const colImg = document.createElement('td');
+            colImg.classList = 'p-4';
+            // img
+            const img = document.createElement('img');
+            img.classList = 'w-16 md:w-32 max-w-full max-h-full';
+            img.src = imgPath;
+            // append the imgEl to colImg
+            colImg.appendChild(img);
+
+            // legend column
+            const colLegend = document.createElement('td');
+            colLegend.classList = 'px-6 py-4 font-semibold text-gray-900 dark:text-white';
+            // legend input
+            const inputLegend = document.createElement('input');
+            inputLegend.classList =
+                'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500';
+            inputLegend.setAttribute('placeholder', 'Description de l\'image');
+            let nameAttrValue = imgName.replace(/[^a-zA-Z0-9]/g, '');
+            inputLegend.setAttribute('name', nameAttrValue);
+            // append the legend input to colLegend
+            colLegend.appendChild(inputLegend);
+
+            // actions column
+            const colActions = document.createElement('td');
+            colActions.classList = 'px-6 py-4';
+            // deleteBtn
+            const deleteAction = document.createElement('button');
+            deleteAction.classList = 'font-medium text-red-600 dark:text-red-500 hover:underline remove-img';
+            deleteAction.setAttribute('type', 'button');
+            deleteAction.innerText = 'retirer';
+            // append the delete btn to colActions
+            colActions.appendChild(deleteAction);
+
+            row.append(colImg, colLegend, colActions);
+
+            return row;
+        }
+
+        document.onmousedown = event => {
+            // drag & drop to order images
+            const target = event.target.closest('div#target');
+            if (target) {
+                (function() {
+                    
+                    // Get the table and its rows
+                    var table = document.getElementById('my-table');
+                    var rows = table.rows;
+                    // Initialize the drag source element to null
+                    var dragSrcEl = null;
+
+                    // Loop through each row (skipping the first row which contains the table headers)
+                    for (var i = 1; i < rows.length; i++) {
+                        var row = rows[i];
+                        // Make each row draggable
+                        row.draggable = true;
+
+                        // Add an event listener for when the drag starts
+                        row.addEventListener('dragstart', function(e) {
+                            // Set the drag source element to the current row
+                            dragSrcEl = this;
+                            // Set the drag effect to "move"
+                            e.dataTransfer.effectAllowed = 'move';
+                            // Set the drag data to the outer HTML of the current row
+                            e.dataTransfer.setData('text/html', this.outerHTML);
+                            // Add a class to the current row to indicate it is being dragged
+                            this.classList.add('bg-gray-100');
+                        });
+
+                        // Add an event listener for when the drag ends
+                        row.addEventListener('dragend', function(e) {
+                            // Remove the class indicating the row is being dragged
+                            this.classList.remove('bg-gray-100');
+                            // Remove the border classes from all table rows
+                            table.querySelectorAll('.border-t-2', '.border-blue-300').forEach(function(el) {
+                                el.classList.remove('border-t-2', 'border-blue-300');
+                            });
+                        });
+
+                        // Add an event listener for when the dragged row is over another row
+                        row.addEventListener('dragover', function(e) {
+                            // Prevent the default dragover behavior
+                            e.preventDefault();
+                            // Add border classes to the current row to indicate it is a drop target
+                            this.classList.add('border-t-2', 'border-blue-300');
+                        });
+
+                        // Add an event listener for when the dragged row enters another row
+                        row.addEventListener('dragenter', function(e) {
+                            // Prevent the default dragenter behavior
+                            e.preventDefault();
+                            // Add border classes to the current row to indicate it is a drop target
+                            this.classList.add('border-t-2', 'border-blue-300');
+                        });
+
+                        // Add an event listener for when the dragged row leaves another row
+                        row.addEventListener('dragleave', function(e) {
+                            // Remove the border classes from the current row
+                            this.classList.remove('border-t-2', 'border-blue-300');
+                        });
+
+                        // Add an event listener for when the dragged row is dropped onto another row
+                        row.addEventListener('drop', function(e) {
+                            // Prevent the default drop behavior
+                            e.preventDefault();
+                            // If the drag source element is not the current row
+                            if (dragSrcEl != this) {
+                                // Get the index of the drag source element
+                                var sourceIndex = dragSrcEl.rowIndex;
+                                // Get the index of the target row
+                                var targetIndex = this.rowIndex;
+                                // If the source index is less than the target index
+                                if (sourceIndex < targetIndex) {
+                                    // Insert the drag source element after the target row
+                                    table.tBodies[0].insertBefore(dragSrcEl, this.nextSibling);
+                                } else {
+                                    // Insert the drag source element before the target row
+                                    table.tBodies[0].insertBefore(dragSrcEl, this);
+                                }
+                            }
+                            // Remove the border classes from all table rows
+                            table.querySelectorAll('.border-t-2', '.border-blue-300').forEach(function(el) {
+                                el.classList.remove('border-t-2', 'border-blue-300');
+                            });
+                        });
+                    }
+                })();
+            }
+
+            // remove an img from the fileList.
+            const removeEl = event.target.closest(".remove-img");
+            if (removeEl) {
+                const row = removeEl.parentNode.parentNode;
+                const fileName = row.getAttribute("data-file");
+                const files = assetsInput.files;
+                const filesArray = Array.from(files);
+                const index = filesArray.indexOf(
+                    filesArray.find((file) => file.name == fileName)
+                );
+
+                if (index > -1) {
+                    filesArray.splice(index, 1);
+                    const newFileList = createFileList(filesArray);
+                    assetsInput.files = newFileList;
+                    row.remove();
+                }
+            }
+        }
+    </script>
 
 </x-admin-layout>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgencyCoordinate;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +11,9 @@ class ContactController extends Controller
 {
 
     public function create() {
-        return view('contact');
+        return view('contact', [
+            'agencies' => AgencyCoordinate::all(),
+        ]);
     }
 
     public function store(Request $request)

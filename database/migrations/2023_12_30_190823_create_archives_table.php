@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('archives', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('user_uuid')->constrained('users', 'uuid', 'archives_user_uuid_foreign')
+            $table->foreignUuid('user_uuid')->nullable()->constrained('users', 'uuid', 'archives_user_uuid_foreign')
                 ->onDelete('cascade');
+            $table->json('archive_types');
             $table->json('data');
             $table->timestamps();
         });

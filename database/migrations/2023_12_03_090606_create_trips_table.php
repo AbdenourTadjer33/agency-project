@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -18,7 +19,9 @@ return new class extends Migration
             $table->longText('description');
             $table->string('destination');
             $table->string('city');
-            $table->foreignId('trip_category_id')->constrained('trip_categories', 'id');
+            $table->foreignId('trip_category_id')
+                ->constrained('trip_categories', 'id')
+                ->onDelete('cascade');
             $table->enum('formule_base', ['LPD', 'LDP', 'LPC']);
             $table->json('assets');
             $table->foreignId('hotel_id')->nullable()->constrained()->nullOnDelete();

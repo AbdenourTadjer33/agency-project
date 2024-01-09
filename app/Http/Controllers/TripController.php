@@ -94,7 +94,11 @@ class TripController extends Controller
     }
 
     public function calculateTripPrice(Request $request) {
+        /**
+         * @var \App\Models\Trip 
+         */
         $trip = Trip::where('slug', $request->slug)->firstOrFail();
+
         $price = $trip->calculatePrice([
             'adult' => $request->countAdult,
             'child' => $request->countChild,
