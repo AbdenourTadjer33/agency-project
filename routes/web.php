@@ -1,27 +1,30 @@
 <?php
 
-use App\Models\Trip;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FaqController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\WelcomeController;
-use App\Http\Controllers\TicketingController;
+
 use App\Http\Controllers\Admin\TripController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\HotelController;
 use App\Http\Controllers\Admin\InboxController;
 use App\Http\Controllers\Admin\AgencyController;
 use App\Http\Controllers\Admin\BookingController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\ReductionController;
+
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TripController as ClientTripController;
 use App\Http\Controllers\HotelController as ClientHotelController;
 use App\Http\Controllers\BookingController as ClientBookingController;
+use App\Http\Controllers\TicketingController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FaqController as ClientFaqController;
 
 Route::get('/test', [BookingController::class, 'archiveBookings']);
 
 Route::get('/', [WelcomeController::class, '__invoke'])->name('welcome');
-Route::get('/faq', [FaqController::class, 'index'])->name('faq');
-Route::post('/faq', [FaqController::class, 'store'])->name('faq.store');
+Route::get('/faq', [ClientFaqController::class, 'index'])->name('faq');
+Route::post('/faq', [ClientFaqController::class, 'store'])->name('faq.store');
 
 Route::get('/trips', [ClientTripController::class, 'index'])->name('trips');
 Route::get('/trip/{slug}', [ClientTripController::class, 'show'])->name('trip.show');
@@ -119,11 +122,28 @@ Route::middleware('auth', 'verified', 'role:admin')->prefix('admin')->group(func
     // InboxController
     Route::controller(InboxController::class)->group(function () {
         Route::get('/inbox', 'index')->name('admin.inboxs');
+        Route::post('/inbox', 'markAs')->name('admin.inbox.markAs');
     });
 
     // UsersController
     Route::controller(UserController::class)->group(function () {
         Route::get('/users', 'index')->name('admin.users');
+        Route::get('/users/{uuid}', 'show')->name('admin.users.show');
+    });
+
+    Route::controller(FaqController::class)->group(function () {
+        Route::get('/faq', 'index')->name('admin.faq');
+        Route::post('/add-faq', 'createFaq')->name('admin.faq.post');
+        Route::post('/faq/{id}', 'store')->name('admin.faq.store');
+        Route::post('/faq-reponse/{id}', 'update')->name('admin.faq.update');
+        Route::delete('/faq/{id}', 'destroy')->name('admin.faq.destroy');
+    });
+
+    Route::controller(ReductionController::class)->group(function () {
+        Route::get('/reductions', 'index')->name('admin.reductions');
+        Route::post('/reductions', 'store')->name('admin.reductions.store');
+        Route::post('/reductions/{id}', 'update')->name('admin.reductions.update');
+        Route::delete('/reductions/{id}', 'destroy')->name('admin.reductions.destroy');
     });
 });
 

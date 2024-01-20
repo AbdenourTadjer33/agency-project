@@ -168,54 +168,6 @@
                     @enderror
                 </div>
 
-                {{-- website --}}
-                <div>
-                    <label for="website" class="block text-sm font-medium text-gray-900 mb-2">Site web</label>
-                    <input type="text" id="website" name='coordinates[website]'
-                        value="{{ $coordinates['website'] }}"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-
-                    @error('coordinates.website')
-                        <div class="text-red-800 error">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- facebook --}}
-                <div>
-                    <label for="facebook" class="block text-sm font-medium text-gray-900 mb-2">Facebook</label>
-                    <input type="text" id="facebook" name='coordinates[facebook]'
-                        value="{{ $coordinates['facebook'] }}"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-
-                    @error('coordinates.facebook')
-                        <div class="text-red-800 error">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- instagram --}}
-                <div>
-                    <label for="instagram" class="block text-sm font-medium text-gray-900 mb-2">instagram</label>
-                    <input type="text" id="instagram" name='coordinates[instagram]'
-                        value="{{ $coordinates['instagram'] }}"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-
-                    @error('coordinates.instagram')
-                        <div class="text-red-800 error">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- booking --}}
-                <div>
-                    <label for="booking" class="block text-sm font-medium text-gray-900 mb-2">Booking</label>
-                    <input type="text" id="booking" name='coordinates[booking]'
-                        value="{{ $coordinates['booking'] }}"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-
-                    @error('coordinates.booking')
-                        <div class="text-red-800 error">{{ $message }}</div>
-                    @enderror
-                </div>
-
             </div>
 
             <div class="grid gap-4 mb-4 sm:grid-cols-3">
@@ -362,7 +314,7 @@
                 @foreach ($assets as $asset)
                     <div class="w-28 h-28 relative overflow-hidden">
                         <img class="transition duration-300 w-full h-full hover:scale-110"
-                            src="{{ asset('storage/' . $asset) }}" alt="">
+                            src="{{ asset('storage/' . $asset['path']) }}" alt="">
                         <span title="suppimer l'image"
                             class="img-remove cursor-pointer absolute top-1 right-1 bg-gray-900 rounded-full p-1">
                             <svg class="w-3 h-3 text-gray-400 dark:text-white" aria-hidden="true"

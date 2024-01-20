@@ -318,7 +318,7 @@
                                 <tr
                                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <td class="p-4">
-                                        <img src="{{ asset('storage/' . $asset) }}"
+                                        <img src="{{ asset('storage/' . $asset['path']) }}"
                                             class="w-16 md:w-32 max-w-full max-h-full">
                                     </td>
                                     <td class="px-6 py-4">

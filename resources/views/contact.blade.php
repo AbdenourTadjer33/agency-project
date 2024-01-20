@@ -1,4 +1,8 @@
 <x-app-layout>
+    @php
+        $agence = request()->agence;
+        $agencyCoordinates = $agence['agency_coordinates'];
+    @endphp
     <div class="sm:mx-8 mx-4 py-5">
         <h1
             class="text-3xl pb-5 text-center font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent sm:mt-2">
@@ -26,19 +30,20 @@
 
         <div class="mt-5 flex flex-col sm:flex-row sm:justify-between" x-data="{}">
 
-            <iframe 
+            <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3196.4792696770874!2d2.958786283653192!3d36.759068400730285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fb03bbe93354d%3A0x49802caf96073a6b!2sCentre%20commercial%20et%20d&#39;affaire%20AlQods!5e0!3m2!1sfr!2sdz!4v1704377457270!5m2!1sfr!2sdz"
                 style="border:0;" allowfullscreen="" loading="lazy" class="h-80 sm:w-[60%] w-full mb-5 sm:mb-0"
                 referrerpolicy="no-referrer-when-downgrade">
             </iframe>
+
             <div class="sm:w-[30%] w-full" id="accordion" data-accordion="collapse">
-                @foreach ($agencies as $agency)
-                    <h2 id="accordion-collapse-heading-{{ $agency->id }}">
+                @foreach ($agencyCoordinates as $agency)
+                    <h2 id="accordion-collapse-heading-{{ $agency['id'] }}">
                         <button type="button"
                             class="flex items-center justify-center w-full p-2 font-medium rtl:text-right text-gray-500  border-b border-t  border-gray-200  focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3"
-                            data-accordion-target="#accordion-collapse-body-{{ $agency->id }}" aria-expanded="false"
-                            aria-controls="accordion-collapse-body-{{ $agency->id }}">
-                            <span>{{ $agency->name }}</span>
+                            data-accordion-target="#accordion-collapse-body-{{ $agency['id'] }}" aria-expanded="false"
+                            aria-controls="accordion-collapse-body-{{ $agency['id'] }}">
+                            <span>{{ $agency['name'] }}</span>
                             <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="false"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -46,8 +51,9 @@
                             </svg>
                         </button>
                     </h2>
-                    <div id="accordion-collapse-body-{{ $agency->id }}" class="{{ $agency->id > 1 ? 'hidden' : '' }}"
-                        aria-labelledby="accordion-collapse-heading-{{ $agency->id }}">
+                    <div id="accordion-collapse-body-{{ $agency['id'] }}"
+                        class="{{ $agency['id'] > 1 ? 'hidden' : '' }}"
+                        aria-labelledby="accordion-collapse-heading-{{ $agency['id'] }}">
                         <div class="p-2 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
                             <address class="flex items-center py-2">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white me-2" aria-hidden="true"
@@ -59,7 +65,7 @@
                                             d="M13.8 12.938h-.01a7 7 0 1 0-11.465.144h-.016l.141.17c.1.128.2.252.3.372L8 20l5.13-6.248c.193-.209.373-.429.54-.66l.13-.154Z" />
                                     </g>
                                 </svg>
-                                {{ $agency->address . ', ' . $agency->city . ', ' . $agency->country }}
+                                {{ $agency['address'] . ', ' . $agency['city'] . ', ' . $agency['country'] }}
                             </address>
                             <span class="flex items-center py-2">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white me-2"
@@ -68,7 +74,7 @@
                                         d="M228.44,89.34l-96-64a8,8,0,0,0-8.88,0l-96,64A8,8,0,0,0,24,96V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V96A8,8,0,0,0,228.44,89.34ZM96.72,152,40,192V111.53Zm16.37,8h29.82l56.63,40H56.46Zm46.19-8L216,111.53V192ZM128,41.61l81.91,54.61-67,47.78H113.11l-67-47.78Z">
                                     </path>
                                 </svg>
-                                {{ $agency->coordinates['email'] }}
+                                {{ $agency['coordinates']['email'] }}
                             </span>
                             <span class="flex items-center py-2">
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white me-2"
@@ -77,7 +83,7 @@
                                         d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z">
                                     </path>
                                 </svg>
-                                {{ $agency->coordinates['phone'] }}
+                                {{ $agency['coordinates']['phone'] }}
                             </span>
                         </div>
                     </div>
@@ -85,6 +91,7 @@
             </div>
         </div>
 
+        {{-- contact form --}}
         <div class="mt-5">
             <form class="mx-auto max-w-2xl p-4 rounded-md bg-gradient-to-tr from-slate-100 via-gray-200 to-neutral-300"
                 id="contact">
@@ -193,7 +200,6 @@
                 </div>
             </form>
         </div>
-
     </div>
 
 

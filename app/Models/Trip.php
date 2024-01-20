@@ -44,6 +44,11 @@ class Trip extends Model
         return $this->hasMany(TripDate::class);
     }
 
+    public function promoCodes(): HasMany
+    {
+        return $this->hasMany(PromoCode::class, 'trip_id', 'id');
+    }
+
     public function booking(): MorphOne
     {
         return $this->morphOne(Booking::class, 'bookingable');

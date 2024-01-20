@@ -1,13 +1,9 @@
 @php
-    $agence = Storage::json('private/Agency.json');
+    // dump(request()->agence);
+    // die();
+    $agence = request()->agence;
     $networks = $agence['networks'];
-    $coordinates = $agence['coordinates'];
-    $phones = [];
-    $emails = [];
-    foreach ($coordinates as $value) {
-        $phones[] = $value['phone'];
-        $emails[] = $value['email'];
-    }
+    $coordinates = $agence['agency_coordinates'];
 
     $logos = [
         'instagram' => asset('storage/icons/instagram-logo.svg'),
@@ -30,10 +26,12 @@
                 <div>
                     <h2 class="mb-3 text-sm font-semibold text-gray-900 uppercase dark:text-white">
                         Nous contacter
-                        {{-- @dump($phones) --}}
                     </h2>
                     <ul class="text-gray-500 dark:text-gray-400 font-medium">
-                        @foreach ($phones as $phone)
+                        @foreach ($coordinates as $coordinate)
+                            @php
+                                $phone = $coordinate['coordinates']['phone'];
+                            @endphp
                             <li class="mb-2">
                                 <a href="tel:{{ $phone }}" class="hover:underline">{{ $phone }}</a>
                             </li>
@@ -47,9 +45,9 @@
                     </h2>
                     <ul class="text-gray-500 dark:text-gray-400 font-medium">
                         @foreach ($networks as $network => $link)
-                        <li class="mb-2">
-                            <a href="{{ $link }}" class="hover:underline">{{ $network }}</a>
-                        </li>                            
+                            <li class="mb-2">
+                                <a href="{{ $link }}" class="hover:underline">{{ $network }}</a>
+                            </li>
                         @endforeach
                     </ul>
                 </div>
@@ -82,10 +80,12 @@
                     <h2 class="mb-3 text-sm font-semibold text-gray-900 uppercase dark:text-white">Legal</h2>
                     <ul class="text-gray-500 dark:text-gray-400 font-medium">
                         <li class="mb-2">
-                            <a href="{{ asset('storage/pdf/term&conditions.pdf') }}" target="_blanck" download class="hover:underline">Politique de Confidentialité</a>
+                            <a href="{{ asset('storage/pdf/term&conditions.pdf') }}" target="_blanck" download
+                                class="hover:underline">Politique de Confidentialité</a>
                         </li>
                         <li>
-                            <a href="{{ asset('storage/pdf/term&conditions.pdf') }}" target="_blanck" download class="hover:underline">Termes &amp; Conditions</a>
+                            <a href="{{ asset('storage/pdf/term&conditions.pdf') }}" target="_blanck" download
+                                class="hover:underline">Termes &amp; Conditions</a>
                         </li>
                     </ul>
                 </div>

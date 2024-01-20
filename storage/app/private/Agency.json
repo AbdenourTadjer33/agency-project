@@ -4,12 +4,14 @@
         "instagram": "https://www.instagram.com/best_tours_tunisia",
         "whatsapp": "https://wa.me/99748029/44848350"
     },
-    "coordinates": [
+    "agency_coordinates": [
         {
             "id": 1,
             "name": "Siége Social",
-            "phone": "+213 770638523",
-            "email":"contact@best-tour.dz",
+            "coordinates": {
+                "phone": "+213 770638523",
+                "email":"contact@best-tour.dz"
+            },
             "address": "67 rue mohemed mez cheraga",
             "city": "Alger",
             "country": "Algérie"
@@ -17,8 +19,10 @@
         {
             "id": 2,
             "name": "Agence Hydra",
-            "phone": "+213 550638753",
-            "email": "commercial-hydra@best-tour.dz",
+            "coordinates": {
+                "phone": "+213 550638753",
+                "email": "commercial-hydra@best-tour.dz"
+            },
             "address": "Bte 05 etage 20 124 Hydra",
             "city": "Alger",
             "country": "Algérie"
@@ -26,8 +30,10 @@
         {
             "id": 3,
             "name": "Agence Oran",
-            "phone": "+213 780115527",
-            "email": "commercial-oran@best-tour.dz",
+            "coordinates": {
+                "phone": "+213 780115527",
+                "email": "commercial-oran@best-tour.dz"
+            },
             "address": "24 bd Didouche Mourad Plateau, 31000",
             "city": "Oran",
             "country": "Algérie"

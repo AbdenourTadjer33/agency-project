@@ -78,3 +78,20 @@ document.addEventListener("new-daterangepicker", (event) => {
         datepickerAutohide: true,
     });
 });
+
+
+const $btnNotifTrigger = document.querySelector('#dropdownNotificationButton');
+const $dropdownNotif = document.querySelector('#dropdownNotification');
+const options = {
+    placement: 'bottom',
+    triggerType: 'click',
+    offsetSkidding: 100,
+    offsetDistance: 35,
+    delay: 300,
+    ignoreClickOutsideClass: false,
+};
+const instanceOptions = {
+    id: 'dropdownMenu',
+    override: true
+};
+const dropdown = new Dropdown($dropdownNotif, $btnNotifTrigger, options, instanceOptions);

@@ -11,9 +11,7 @@ class ContactController extends Controller
 {
 
     public function create() {
-        return view('contact', [
-            'agencies' => AgencyCoordinate::all(),
-        ]);
+        return view('contact');
     }
 
     public function store(Request $request)

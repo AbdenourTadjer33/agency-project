@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>{{ $title ?? 'Admin panel' }}</title>
-
 </head>
-
 <body>
+
     <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
@@ -193,6 +191,7 @@
                     // trips
                     $routeIsAdminTrips = request()->routeIs('admin.trips');
                     $routeIsAdminTripCreate = request()->routeIs('admin.trip.create');
+                    $routeIsAdminTripEdit = request()->routeIs('admin.trip.edit');
 
                     // hotels
                     $routeIsAdminHotels = request()->routeIs('admin.hotels');
@@ -205,13 +204,20 @@
                     $routeIsAdminBookingsHotel = request()->routeIs('admin.bookings.hotel');
                     $routeIsAdminBookingsTicketing = request()->routeIs('admin.bookings.ticketing');
                     $routeIsAdminBookingShow = request()->routeIs('admin.booking.show');
-                    $routeBookings = $routeIsAdminBookingsTrip || $routeIsAdminBookingsHotel ||$routeIsAdminBookingsTicketing || $routeIsAdminBookingShow;
+                    $routeBookings = $routeIsAdminBookingsTrip || $routeIsAdminBookingsHotel || $routeIsAdminBookingsTicketing || $routeIsAdminBookingShow;
 
                     // inbox
                     $routeIsAdminInboxs = request()->routeIs('admin.inboxs');
 
                     // users
                     $routeIsAdminUsers = request()->routeIs('admin.users');
+                    $routeIsAdminUserShow = request()->routeIs('admin.users.show');
+
+                    // faq
+                    $routeIsAdminFaq = request()->routeIs('admin.faq');
+
+                    // reductions & offers
+                    $routeIsAdminReduction = request()->routeIs('admin.reductions');
                 @endphp
 
                 {{-- dashboard --}}
@@ -238,8 +244,7 @@
                             class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             version="1.0" viewBox="0 0 118.000000 128.000000" fill="currentColor">
 
-                            <g transform="translate(0.000000,128.000000) scale(0.100000,-0.100000)" fill="#000000"
-                                stroke="none">
+                            <g transform="translate(0.000000,128.000000) scale(0.100000,-0.100000)" stroke="none">
                                 <path
                                     d="M541 1257 c-79 -40 -84 -158 -9 -198 12 -6 40 -12 62 -12 33 0 45 6 73 36 22 25 33 47 33 67 0 87 -86 145 -159 107z" />
                                 <path
@@ -273,7 +278,7 @@
                 {{-- Trip --}}
                 <li>
                     <a href="{{ route('admin.trips') }}"
-                        class="{{ $routeIsAdminTrips || $routeIsAdminTripCreate ? $selectedButton : '' }}  flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        class="{{ $routeIsAdminTrips || $routeIsAdminTripCreate || $routeIsAdminTripEdit ? $selectedButton : '' }}  flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 122.88 107.54">
@@ -293,8 +298,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.0"
                             class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
-                            <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#000000"
-                                stroke="none">
+                            <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" stroke="none">
                                 <path
                                     d="M45 4228 c-47 -25 -45 53 -45 -1666 0 -1020 4 -1630 10 -1641 5 -10 22 -24 39 -30 24 -10 34 -10 59 3 16 8 32 23 36 31 3 9 6 309 6 666 l0 649 90 0 90 0 -6 -80 c-8 -93 4 -134 44 -148 31 -11 69 0 87 25 7 9 15 59 19 112 13 179 55 333 133 481 198 376 553 613 976 650 65 6 127 15 138 20 24 13 35 55 23 89 -15 41 -48 51 -146 44 l-88 -6 0 92 0 91 285 0 285 0 0 -349 0 -349 -29 -11 c-67 -28 -116 -106 -127 -204 l-7 -55 -271 -4 -271 -4 -62 -28 c-64 -29 -128 -88 -156 -142 -35 -68 -38 -138 -35 -744 l3 -595 26 -55 c33 -70 89 -126 159 -159 l55 -26 1755 0 c1667 0 1757 1 1795 18 104 47 173 127 194 227 9 40 11 220 9 660 l-3 605 -24 53 c-29 65 -113 143 -178 167 -40 15 -93 19 -319 23 l-271 4 -6 57 c-2 32 -14 76 -26 98 -21 43 -95 113 -118 113 -10 0 -13 67 -13 350 l0 350 388 0 c387 0 387 0 438 24 104 48 156 166 122 277 -15 51 -69 114 -122 142 l-41 22 -2397 3 -2398 2 0 49 c0 64 -6 79 -41 96 -33 18 -38 18 -64 3z m4875 -311 c54 -27 64 -97 19 -135 -18 -15 -67 -17 -535 -22 l-516 -5 -19 -24 c-25 -31 -24 -69 3 -98 18 -19 32 -23 80 -23 l58 0 0 -344 0 -343 -49 -30 c-67 -42 -104 -107 -109 -190 l-4 -63 -729 0 -729 0 0 55 c0 91 -45 167 -121 206 l-39 20 2 342 3 342 702 5 c644 5 704 6 719 22 24 24 22 75 -5 101 l-22 22 -1739 3 -1740 2 0 85 0 85 2373 0 c1877 0 2377 -3 2397 -13z m-3560 -412 c0 -76 -4 -107 -12 -109 -268 -77 -445 -180 -628 -365 -166 -167 -265 -326 -333 -536 l-32 -100 -103 -3 -102 -3 0 611 0 610 605 0 605 0 0 -105z m839 -740 c33 -17 41 -33 41 -86 l0 -39 -85 0 c-83 0 -85 1 -85 24 0 41 21 86 49 101 33 18 46 18 80 0z m1945 -14 c10 -11 20 -39 23 -65 l6 -46 -87 0 -86 0 0 43 c1 44 12 66 45 85 26 16 75 7 99 -17z m746 -293 c18 -13 43 -36 54 -51 21 -28 21 -37 24 -634 2 -597 2 -606 -18 -649 -13 -26 -36 -53 -58 -66 l-37 -23 -1735 0 c-1629 0 -1738 1 -1762 17 -15 10 -39 34 -55 55 l-28 36 -3 601 -2 601 22 45 c13 25 38 55 57 67 l34 23 1737 0 1737 0 33 -22z" />
                                 <path
@@ -333,7 +337,7 @@
                                 stroke-width="2" d="m1 1 4 4 4-4" />
                         </svg>
                     </button>
-                    <ul id="dropdown-example" class="{{ $routeBookings ? '' : 'hidden'  }} py-2 space-y-2">
+                    <ul id="dropdown-example" class="{{ $routeBookings ? '' : 'hidden' }} py-2 space-y-2">
                         <li>
                             <a href="{{ route('admin.bookings.trip') }}"
                                 class="{{ $routeIsAdminBookingsTrip ? 'bg-gray-100' : '' }} flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
@@ -367,14 +371,16 @@
                         </svg>
                         <span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
                         <span
-                            class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
+                            class="bg-blue-100 text-blue-800 text-xs font-medium  px-2 py-0.5 rounded-xl dark:bg-blue-900 dark:text-blue-300">
+                            {{ \App\Models\Contact::where('status', 'non lu')->count() }}
+                        </span>
                     </a>
                 </li>
 
                 {{-- users --}}
                 <li>
                     <a href="{{ route('admin.users') }}"
-                        class="{{ $routeIsAdminUsers ? $selectedButton : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        class="{{ $routeIsAdminUsers || $routeIsAdminUserShow ? $selectedButton : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 20 18">
@@ -387,8 +393,8 @@
 
                 {{-- offers --}}
                 <li>
-                    <a href="#"
-                        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                    <a href="{{ route('admin.reductions') }}"
+                        class="{{ $routeIsAdminReduction ? $selectedButton : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 18 20">
@@ -398,11 +404,34 @@
                         <span class="flex-1 ms-3 whitespace-nowrap">Réduction & cadeau</span>
                     </a>
                 </li>
+
+                {{-- faq --}}
+                <li>
+                    <a href="{{ route('admin.faq') }}"
+                        class="{{ $routeIsAdminFaq ? $selectedButton : '' }} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.0"
+                            class="flex-shrink-0  w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                            viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"
+                            fill="currentColor">
+
+                            <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" stroke="none">
+                                <path
+                                    d="M1002 4829 c-503 -66 -905 -457 -987 -959 -12 -78 -15 -207 -15 -727 0 -395 4 -660 11 -709 67 -486 443 -881 927 -975 l62 -12 0 -524 c0 -521 0 -526 22 -564 23 -41 84 -79 126 -79 62 0 101 35 662 595 l565 565 846 0 c705 0 861 2 932 15 496 86 872 464 952 955 22 137 22 1307 0 1453 -36 241 -148 461 -325 638 -158 158 -332 255 -560 312 -84 21 -94 21 -1620 23 -844 1 -1563 -2 -1598 -7z m3113 -304 c328 -57 581 -290 677 -622 23 -78 23 -81 23 -768 l0 -690 -28 -88 c-101 -323 -340 -539 -665 -603 -61 -11 -231 -14 -958 -14 -790 0 -888 -2 -917 -16 -18 -9 -238 -221 -489 -472 l-458 -457 0 414 c0 406 0 414 -22 452 -28 49 -86 79 -155 79 -112 0 -268 43 -382 106 -231 127 -393 361 -431 622 -8 52 -10 284 -8 722 l3 645 28 88 c15 49 39 112 54 140 121 240 352 414 610 461 122 22 2992 23 3118 1z" />
+                                <path
+                                    d="M2403 3839 c-59 -8 -108 -32 -134 -69 -22 -31 -389 -1234 -389 -1277 0 -62 130 -134 218 -119 57 9 76 38 113 179 l33 127 212 0 211 0 34 -127 c44 -163 55 -178 141 -178 77 1 156 39 183 89 16 31 16 33 -175 656 -105 344 -199 636 -209 650 -40 55 -133 82 -238 69z m122 -639 c36 -135 68 -253 71 -262 5 -17 -6 -18 -141 -18 -114 0 -146 3 -143 13 3 6 36 126 73 265 37 139 69 251 71 250 1 -2 32 -113 69 -248z" />
+                                <path
+                                    d="M1053 3815 c-17 -7 -36 -22 -42 -34 -8 -13 -11 -228 -11 -685 l0 -665 26 -20 c74 -58 220 -48 271 18 9 12 12 89 13 284 l0 267 155 0 c208 0 235 15 235 130 0 38 -6 55 -26 79 l-26 31 -169 0 -169 0 0 170 0 170 268 0 c297 0 301 1 328 66 28 67 9 170 -34 193 -33 18 -778 14 -819 -4z" />
+                                <path
+                                    d="M3558 3814 c-156 -37 -262 -143 -303 -301 -22 -85 -22 -753 0 -838 42 -159 152 -263 313 -296 l62 -13 0 -68 c0 -85 17 -122 64 -138 27 -9 41 -8 69 3 47 20 51 30 57 121 l5 80 58 13 c181 41 298 163 326 343 17 102 14 691 -3 771 -37 174 -143 283 -317 324 -80 18 -254 18 -331 -1z m259 -273 c30 -14 48 -32 65 -63 22 -42 23 -52 26 -346 2 -200 -1 -321 -8 -357 -11 -51 -50 -115 -71 -115 -5 0 -9 27 -9 60 0 79 -26 110 -94 110 -37 0 -48 -5 -70 -31 -21 -25 -26 -41 -26 -85 0 -58 -7 -65 -34 -35 -41 45 -45 83 -46 419 0 340 3 365 48 416 42 47 145 60 219 27z" />
+                            </g>
+                        </svg>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Foire au question</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </aside>
 
-    <!-- Page Content -->
     <main class="p-4 2xl:ml-64 mt-14">
         {{ $slot }}
     </main>
@@ -410,31 +439,5 @@
     @isset($script)
         <script src="{{ $script }}"></script>
     @endisset
-
-    <script>
-        window.onload = () => {
-
-            const $btnNotifTrigger = document.querySelector('#dropdownNotificationButton');
-            const $dropdownNotif = document.querySelector('#dropdownNotification');
-
-            const options = {
-                placement: 'bottom',
-                triggerType: 'click',
-                offsetSkidding: 100,
-                offsetDistance: 35,
-                delay: 300,
-                ignoreClickOutsideClass: false,
-            };
-
-            const instanceOptions = {
-                id: 'dropdownMenu',
-                override: true
-            };
-
-            const dropdown = new Dropdown($dropdownNotif, $btnNotifTrigger, options, instanceOptions);
-        }
-    </script>
-
 </body>
-
 </html>

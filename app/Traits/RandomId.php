@@ -14,4 +14,12 @@ trait RandomId
         } while (static::where($col, $randomId)->first());
         return $randomId;
     }
+
+    public static function randomCode()
+    {
+        do {
+            $randomCode = str_shuffle(random_int(10000, 99999));
+        } while (static::where('code', $randomCode)->first());
+        return $randomCode;
+    }
 }

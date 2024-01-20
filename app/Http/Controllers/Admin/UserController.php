@@ -17,8 +17,11 @@ class UserController extends Controller
         ]);
     }
 
-    public function show()
+    public function show(Request $request)
     {
-        $user = User::select();
+        $users = User::withCount('bookings')->where('uuid', $request->uuid)->paginate(5);
+        return view('admin.user.index', [
+            'users' => $users,
+        ]);
     }
 }

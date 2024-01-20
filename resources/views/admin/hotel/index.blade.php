@@ -77,6 +77,8 @@
                 </a>
             </div>
         </div>
+
+        
         @if (count($hotels))
             <div class="mt-4 flex flex-wrap gap-2">
                 <div class="w-full max-w-full mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">

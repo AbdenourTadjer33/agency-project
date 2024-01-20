@@ -29,7 +29,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::pattern('ref', '[0-9]+');
 
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            return Limit::perMinute(1000)->by($request->user()?->id ?: $request->ip());
         });
 
         $this->routes(function () {

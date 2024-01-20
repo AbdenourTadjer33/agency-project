@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ReductionController;
 use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,8 @@ Route::post('/hotel/{slug}/calculate-price', [ClientHotelController::class, 'Cal
 
 
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.post');
+
+Route::post('/generate-random-promo-code', [ReductionController::class, 'randomCode'])->name('random.promoCode');
 
 // login & verify email api's 
 Route::controller(AuthController::class)->group(function () {

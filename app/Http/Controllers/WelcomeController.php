@@ -20,7 +20,6 @@ class WelcomeController extends Controller
 
         $trips = Trip::orderBy('trip_category_id', 'desc')->orderBy('created_at', 'desc')->with(['hotel:id,name,classification', 'tripDates', 'tripCategory:id,name', 'pricing:id,pricingable_id,pricingable_type,price_adult'])->get();
         $hotels = Hotel::where('slug', '<>', null)->orderBy('created_at', 'desc')->with(['pricing:id,pricingable_id,pricingable_type,price_adult'])->get();
-        // dd($hotels);
         return view('welcome', [
             'trips' => $trips,
             'hotels' => $hotels,
